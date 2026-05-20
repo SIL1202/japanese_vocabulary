@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>日文單字練習機 - 稱謂篇</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="words.js" defer></script>
+    <script src="app.js" defer></script>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;600&family=Noto+Sans+JP:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "SF Pro Display", "Noto Sans JP", sans-serif;
+      }
+
+      .apple-glass {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(25px) saturate(160%);
+        -webkit-backdrop-filter: blur(25px) saturate(160%);
+        box-shadow:
+          inset 0 1px 1px rgba(255, 255, 255, 0.2),
+          inset 0 -1px 1px rgba(0, 0, 0, 0.4),
+          0 20px 50px rgba(0, 0, 0, 0.3);
+      }
+
+      @keyframes blobMorph {
+        0% {
+          border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+          transform: translate(0px, 0px) rotate(0deg);
+        }
+        33% {
+          border-radius: 70% 30% 52% 48% / 60% 40% 60% 40%;
+          transform: translate(30px, -50px) rotate(120deg);
+        }
+        66% {
+          border-radius: 28% 72% 35% 65% / 40% 60% 40% 60%;
+          transform: translate(-20px, 20px) rotate(240deg);
+        }
+        100% {
+          border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+          transform: translate(0px, 0px) rotate(360deg);
+        }
+      }
+
+      .animate-blob {
+        animation: blobMorph 18s infinite alternate ease-in-out;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .focused-btn {
+        border-color: rgba(251, 191, 36, 0.6) !important;
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+        transform: scale(1.02);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-[#09090b] h-screen w-screen overflow-hidden flex flex-col items-center justify-center relative select-none"
+  >
+    <div
+      class="absolute w-[500px] h-[500px] bg-gradient-to-tr from-amber-500/10 to-orange-600/10 rounded-full blur-[100px] top-12 left-12 animate-blob pointer-events-none"
+    ></div>
+    <div
+      class="absolute w-[600px] h-[600px] bg-gradient-to-br from-indigo-500/10 to-purple-600/15 rounded-full blur-[80px] bottom-12 right-12 animate-blob pointer-events-none"
+      style="animation-delay: -4s"
+    ></div>
+
+    <!-- Start Screen -->
+    <div
+      id="start-screen"
+      class="w-full max-w-md p-10 border border-white/10 text-center rounded-[32px] apple-glass z-10"
+    >
+      <h1 class="text-4xl font-bold text-white mb-8">稱謂練習</h1>
+      <p class="text-zinc-400 mb-10">選擇您想要練習的題數：</p>
+      <div class="grid grid-cols-1 gap-4">
+        <button
+          onclick="startSession(5)"
+          class="nav-btn bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-4 rounded-2xl transition-all active:scale-95 cursor-pointer"
+        >
+          5 題
+        </button>
+        <button
+          onclick="startSession(10)"
+          class="nav-btn bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-4 rounded-2xl transition-all active:scale-95 cursor-pointer"
+        >
+          10 題
+        </button>
+        <button
+          onclick="startSession('all')"
+          class="nav-btn bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-4 rounded-2xl transition-all active:scale-95 cursor-pointer"
+        >
+          所有題目
+        </button>
+      </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div
+      id="quiz-screen"
+      class="w-full max-w-md p-10 border border-white/10 text-center rounded-[32px] apple-glass z-10 hidden"
+    >
+      <div class="mb-10">
+        <div
+          id="top-bar"
+          class="flex justify-between items-center text-xs tracking-widest text-zinc-500 uppercase font-semibold"
+        >
+          <span>Vocabulary Test</span>
+          <span id="progress-text" class="font-mono text-zinc-400"
+            >01 / 20</span
+          >
+        </div>
+        <div
+          id="lives-display"
+          class="flex justify-center gap-1.5 text-sm mt-3 transition-all"
+        ></div>
+      </div>
+
+      <div class="mb-14">
+        <h1
+          id="word-kanji"
+          class="text-6xl font-bold tracking-tight text-white mb-3"
+        >
+          載入中...
+        </h1>
+        <p
+          id="word-info"
+          class="text-zinc-400 text-sm tracking-wide font-light"
+        ></p>
+      </div>
+
+      <div class="space-y-6">
+        <input
+          type="text"
+          id="answer-input"
+          placeholder="輸入平假名讀音..."
+          class="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-xl text-center text-white placeholder-zinc-700 focus:outline-none focus:border-amber-400/40 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]"
+          autocomplete="off"
+        />
+        <div
+          id="feedback-msg"
+          class="h-6 text-sm tracking-wider font-semibold"
+        ></div>
+      </div>
+
+      <footer class="mt-8">
+        <button
+          id="skip-btn"
+          class="bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 hover:text-white text-xs tracking-widest uppercase font-medium px-6 py-3 rounded-full cursor-pointer transition-all duration-300 backdrop-blur-md active:scale-95"
+        >
+          跳過此題
+        </button>
+      </footer>
+    </div>
+
+    <!-- Result Screen -->
+    <div
+      id="result-screen"
+      class="w-full max-w-md p-10 border border-white/10 text-center rounded-[32px] apple-glass z-10 hidden"
+    >
+      <h1 class="text-4xl font-bold text-white mb-6">練習結束！</h1>
+      <div id="result-stats" class="text-zinc-400 mb-10 space-y-2">
+        <!-- Stats will be injected here -->
+      </div>
+      <div class="grid grid-cols-1 gap-4">
+        <button
+          id="review-btn"
+          class="nav-btn bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 text-amber-400 px-6 py-4 rounded-2xl transition-all active:scale-95 cursor-pointer hidden"
+        >
+          複習錯誤題目
+        </button>
+        <button
+          onclick="location.reload()"
+          class="nav-btn bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-4 rounded-2xl transition-all active:scale-95 cursor-pointer"
+        >
+          重新開始
+        </button>
+        <button
+          onclick="window.close()"
+          class="nav-btn bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-500 px-6 py-4 rounded-2xl transition-all active:scale-95 cursor-pointer"
+        >
+          退出系統
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
