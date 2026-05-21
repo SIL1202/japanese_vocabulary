@@ -1,7 +1,7 @@
 import { Geist } from "next/font/google";
 import { useState, useRef, useEffect, useCallback } from "react";
 import LiquidGlass from "liquid-glass-react";
-import { Github } from "lucide-react";
+import { Github, Settings } from "lucide-react";
 import { WORD_BANK } from "@/data/words";
 import type { Word } from "@/data/words";
 
@@ -29,8 +29,8 @@ export default function Home() {
   const [blurAmount, setBlurAmount] = useState(0.1);
   const [saturation, setSaturation] = useState(140);
   const [aberrationIntensity, setAberrationIntensity] = useState(2);
-  const [elasticity, setElasticity] = useState(0.15);
-  const [cornerRadius, setCornerRadius] = useState(32);
+  const [elasticity, setElasticity] = useState(0.5);
+  const [cornerRadius, setCornerRadius] = useState(50);
   const [overLight, setOverLight] = useState(false);
   const [mode, setMode] = useState<
     "standard" | "polar" | "prominent" | "shader"
@@ -55,7 +55,7 @@ export default function Home() {
   const [focusedBtn, setFocusedBtn] = useState(0);
 
   // --- UI State ---
-  const [isPanelOpen, setIsPanelOpen] = useState(true);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   useEffect(() => {
     if (screen === "quiz") setTimeout(() => inputRef.current?.focus(), 100);
@@ -179,7 +179,7 @@ export default function Home() {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [screen, focusedBtn, mistakes, sessionWords, currentIndex]);
+  }, [screen, focusedBtn, mistakes, sessionWords, currentIndex, handleSkip]);
 
   const accuracy =
     sessionWords.length > 0
@@ -215,394 +215,336 @@ export default function Home() {
 
   return (
     <div
-      className={`${geistSans.className} grid grid-cols-1 grid-rows-2 md:grid-rows-1 md:grid-cols-3 shadow-2xl w-full max-w-5xl mx-auto md:my-10 h-screen md:max-h-[calc(100vh-5rem)] md:rounded-3xl overflow-hidden`}
+      className={`${geistSans.className} relative w-full max-w-5xl mx-auto md:my-10 h-screen md:max-h-[calc(100vh-5rem)] md:rounded-3xl overflow-hidden shadow-2xl bg-black`}
     >
-      {/* Left Panel - Single Image Background */}
-      <div
-        className="flex-1 relative min-h-screen md:col-span-2 bg-cover bg-center overflow-hidden"
-        ref={containerRef}
-        style={{ backgroundImage: `url('${bgImage}')` }}
-      >
-        <div className="absolute inset-0 bg-black/10 pointer-events-none"></div>
-
-        <LiquidGlass
-          displacementScale={displacementScale}
-          blurAmount={blurAmount}
-          saturation={saturation}
-          aberrationIntensity={aberrationIntensity}
-          elasticity={elasticity}
-          cornerRadius={cornerRadius}
-          mouseContainer={containerRef}
-          overLight={overLight}
-          mode={mode}
-          padding="0px"
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            // minHeight: "460px", // 👈 在這裡加上最小高度
-            // width: "320px",
-          }}
+      <div className="flex h-full w-full">
+        {/* Left Panel - Single Image Background */}
+        <div
+          className="flex-1 relative bg-cover bg-center overflow-hidden transition-all duration-500"
+          ref={containerRef}
+          style={{ backgroundImage: `url('${bgImage}')` }}
         >
-          <div
-            className={`w-80 min-h-[460px] flex flex-col justify-center transition-transform duration-300 ${isShaking ? "animate-[shake_0.3s_ease-in-out]" : ""}`}
+          <div className="absolute inset-0 bg-black/10 pointer-events-none"></div>
+
+          <LiquidGlass
+            displacementScale={displacementScale}
+            blurAmount={blurAmount}
+            saturation={saturation}
+            aberrationIntensity={aberrationIntensity}
+            elasticity={elasticity}
+            cornerRadius={cornerRadius}
+            mouseContainer={containerRef}
+            overLight={overLight}
+            mode={mode}
+            padding="0px"
             style={{
-              borderRadius: `${cornerRadius}px`,
-              padding: "2.5rem",
-              // 核心修正：強迫瀏覽器啟用硬體加速剪裁，把 HTML 的直角徹底消滅
-              overflow: "hidden",
-              transform: "translateZ(0)",
-              isolation: "isolate",
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
             }}
           >
-            {/* START */}
-            {screen === "start" && (
-              <>
-                <h3 className="text-xl font-semibold mb-4 text-white">
-                  稱謂練習
-                </h3>
-                <p className="text-sm text-white/70 mb-6">
-                  選擇您想要練習的題數：
-                </p>
-                <div className="space-y-3">
-                  {startBtns.map((btn, i) => (
-                    <button
-                      key={btn.label}
-                      onClick={btn.action}
-                      className={`w-full border text-white px-6 py-4 rounded-2xl transition-all active:scale-95 ${
-                        focusedBtn === i
-                          ? "bg-white/10 border-amber-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)] scale-[1.02]"
-                          : "bg-white/5 hover:bg-white/10 border-white/10"
-                      }`}
-                    >
-                      {btn.label}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-            {/* QUIZ */}
-            {screen === "quiz" && (
-              <>
-                <div className="mb-6">
-                  <div className="flex justify-between items-center text-xs tracking-widest text-white/50 uppercase font-semibold">
-                    <span>Vocabulary Test</span>
-                    <span className="font-mono">
-                      {(currentIndex + 1).toString().padStart(2, "0")} /{" "}
-                      {sessionWords.length.toString().padStart(2, "0")}
-                    </span>
-                  </div>
-                  <div className="flex justify-center gap-1.5 text-sm mt-3">
-                    {[1, 2, 3].map((i) => (
-                      <span
-                        key={i}
-                        className={
-                          i <= lives
-                            ? "text-rose-500 drop-shadow-[0_0_8px_rgba(244,63,94,0.5)]"
-                            : "text-zinc-700"
-                        }
+            <div
+              className={`w-80 min-h-[460px] flex flex-col justify-center transition-transform duration-300 ${isShaking ? "animate-shake" : ""}`}
+              style={{
+                borderRadius: `${cornerRadius}px`,
+                padding: "2.5rem",
+              }}
+            >
+              {/* START */}
+              {screen === "start" && (
+                <>
+                  <h3 className="text-xl font-semibold mb-4 text-white">
+                    稱謂練習
+                  </h3>
+                  <p className="text-sm text-white/70 mb-6">
+                    選擇您想要練習的題數：
+                  </p>
+                  <div className="space-y-3">
+                    {startBtns.map((btn, i) => (
+                      <button
+                        key={btn.label}
+                        onClick={btn.action}
+                        className={`w-full border text-white px-6 py-4 rounded-2xl transition-all active:scale-95 ${
+                          focusedBtn === i
+                            ? "bg-white/10 border-amber-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)] scale-[1.02]"
+                            : "bg-white/5 hover:bg-white/10 border-white/10"
+                        }`}
                       >
-                        {i <= lives ? "❤️" : "🖤"}
-                      </span>
+                        {btn.label}
+                      </button>
                     ))}
                   </div>
-                </div>
-                <h1 className="text-6xl font-bold text-white mb-3 tracking-tight">
-                  {sessionWords[currentIndex]?.kanji}
-                </h1>
-                <p className="text-white/50 text-sm mb-10 font-light">
-                  【{sessionWords[currentIndex]?.part}】
-                  {sessionWords[currentIndex]?.meaning}
-                </p>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={inputValue}
-                  disabled={inputDisabled}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyDown={handleInputSubmit}
-                  placeholder="輸入平假名讀音..."
-                  className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 text-xl text-center text-white placeholder-white/30 focus:outline-none focus:border-amber-400/40 transition-all shadow-inner"
-                />
-                <div
-                  className={`h-6 text-sm font-semibold mt-4 text-center tracking-wide ${feedback.type}`}
-                >
-                  {feedback.text}
-                </div>
-                <div className="mt-6 text-center">
-                  <button
-                    onClick={handleSkip}
-                    className="bg-white/5 hover:bg-white/10 border border-white/10 text-white/50 hover:text-white text-xs tracking-widest uppercase font-medium px-6 py-3 rounded-full transition-all active:scale-95"
-                  >
-                    跳過此題
-                  </button>
-                </div>
-              </>
-            )}
-            {/* RESULT */}
-            {screen === "result" && (
-              <>
-                <h3 className="text-xl font-semibold mb-4 text-white">
-                  練習結束！
-                </h3>
-                <div className="text-5xl font-bold text-white mb-3">
-                  {accuracy}%
-                </div>
-                <div className="text-white/50 text-sm mb-8 space-y-1">
-                  <p>完成題數：{sessionWords.length}</p>
-                  <p>正確答對：{correctCount} 題</p>
-                  <p>錯誤題目：{mistakes.length} 題</p>
-                </div>
-                <div className="space-y-3">
-                  {resultBtns.map((btn, i) => (
-                    <button
-                      key={btn.label}
-                      onClick={btn.action}
-                      className={`w-full border px-6 py-4 rounded-2xl transition-all active:scale-95 ${btn.style} ${
-                        focusedBtn === i
-                          ? "ring-2 ring-amber-400/60 scale-[1.02]"
-                          : ""
-                      }`}
-                    >
-                      {btn.label}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-        </LiquidGlass>
-      </div>
+                </>
+              )}
 
-      {/* Right Panel */}
-      <div className="row-start-2 rounded-t-3xl md:rounded-none md:col-start-3 bg-gray-900/80 h-full overflow-y-auto backdrop-blur-md border-l border-white/10 p-8 flex flex-col">
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold text-white">稱謂練習</h2>
-            <a
-              href="https://github.com/rdev/liquid-glass-react"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/70 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg"
-            >
-              <Github className="w-6 h-6" />
-            </a>
-          </div>
-          <p className="text-white/60 text-sm">
-            Liquid Glass container effect for React.
-          </p>
-          <p className="font-semibold text-yellow-300 text-xs mt-2 leading-snug">
-            ⚠️ This doesn't fully work in Safari and Firefox.
-          </p>
-        </div>
-
-        <div className="space-y-8 flex-1">
-          <div>
-            <span className="block text-sm font-semibold text-white/90 mb-3">
-              Refraction Mode
-            </span>
-            <div className="space-y-2">
-              {(["standard", "polar", "prominent", "shader"] as const).map(
-                (m) => (
-                  <div key={m} className="flex items-center space-x-3">
-                    <input
-                      type="radio"
-                      id={`mode-${m}`}
-                      name="mode"
-                      value={m}
-                      checked={mode === m}
-                      onChange={(e) => setMode(e.target.value as typeof mode)}
-                      className="w-4 h-4 accent-blue-500"
-                    />
-                    <label
-                      htmlFor={`mode-${m}`}
-                      className="text-sm text-white/90 capitalize"
-                    >
-                      {m}
-                      {m === "shader" ? " (Experimental)" : ""}
-                    </label>
+              {/* QUIZ */}
+              {screen === "quiz" && (
+                <>
+                  <div className="mb-6">
+                    <div className="flex justify-between items-center text-xs tracking-widest text-white/50 uppercase font-semibold">
+                      <span>Vocabulary Test</span>
+                      <span className="font-mono">
+                        {(currentIndex + 1).toString().padStart(2, "0")} /{" "}
+                        {sessionWords.length.toString().padStart(2, "0")}
+                      </span>
+                    </div>
+                    <div className="flex justify-center gap-1.5 text-sm mt-3">
+                      {[1, 2, 3].map((i) => (
+                        <span
+                          key={i}
+                          className={
+                            i <= lives
+                              ? "text-rose-500 drop-shadow-[0_0_8px_rgba(244,63,94,0.5)]"
+                              : "text-zinc-700"
+                          }
+                        >
+                          {i <= lives ? "❤️" : "🖤"}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                ),
+                  <h1 className="text-6xl font-bold text-white mb-3 tracking-tight">
+                    {sessionWords[currentIndex]?.kanji}
+                  </h1>
+                  <p className="text-white/50 text-sm mb-10 font-light">
+                    【{sessionWords[currentIndex]?.part}】
+                    {sessionWords[currentIndex]?.meaning}
+                  </p>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={inputValue}
+                    disabled={inputDisabled}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={handleInputSubmit}
+                    placeholder="輸入平假名讀音..."
+                    className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 text-xl text-center text-white placeholder-white/30 focus:outline-none focus:border-amber-400/40 transition-all shadow-inner"
+                  />
+                  <div
+                    className={`h-6 text-sm font-semibold mt-4 text-center tracking-wide ${feedback.type}`}
+                  >
+                    {feedback.text}
+                  </div>
+                  <div className="mt-6 text-center">
+                    <button
+                      onClick={handleSkip}
+                      className="bg-white/5 hover:bg-white/10 border border-white/10 text-white/50 hover:text-white text-xs tracking-widest uppercase font-medium px-6 py-3 rounded-full transition-all active:scale-95"
+                    >
+                      跳過此題
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {/* RESULT */}
+              {screen === "result" && (
+                <>
+                  <h3 className="text-xl font-semibold mb-4 text-white">
+                    練習結束！
+                  </h3>
+                  <div className="text-5xl font-bold text-white mb-3">
+                    {accuracy}%
+                  </div>
+                  <div className="text-white/50 text-sm mb-8 space-y-1">
+                    <p>完成題數：{sessionWords.length}</p>
+                    <p>正確答對：{correctCount} 題</p>
+                    <p>錯誤題目：{mistakes.length} 題</p>
+                  </div>
+                  <div className="space-y-3">
+                    {resultBtns.map((btn, i) => (
+                      <button
+                        key={btn.label}
+                        onClick={btn.action}
+                        className={`w-full border px-6 py-4 rounded-2xl transition-all active:scale-95 ${btn.style} ${
+                          focusedBtn === i
+                            ? "ring-2 ring-amber-400/60 scale-[1.02]"
+                            : ""
+                        }`}
+                      >
+                        {btn.label}
+                      </button>
+                    ))}
+                  </div>
+                </>
               )}
             </div>
-            <p className="text-xs text-white/50 mt-2">
-              Controls the refraction calculation method
-            </p>
-          </div>
+          </LiquidGlass>
 
-          <div>
-            <span className="block text-sm font-semibold text-white/90 mb-3">
-              Displacement Scale
-            </span>
-            <div className="mb-2">
-              <span className="text-xl font-mono text-blue-300">
-                {displacementScale}
-              </span>
-            </div>
-            <input
-              type="range"
-              min="0"
-              max="200"
-              step="1"
-              value={displacementScale}
-              onChange={(e) => setDisplacementScale(Number(e.target.value))}
-              className="w-full"
+          {/* Sidebar Toggle Button */}
+          <button
+            onClick={() => setIsPanelOpen(!isPanelOpen)}
+            className={`absolute top-4 right-4 z-50 p-3 bg-black/40 backdrop-blur-xl border border-white/10 text-white rounded-full hover:bg-white/10 transition-all ${isPanelOpen ? "rotate-90 bg-blue-600/20 border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]" : ""}`}
+          >
+            <Settings
+              size={20}
+              className={isPanelOpen ? "animate-spin-slow" : ""}
             />
-            <p className="text-xs text-white/50 mt-2">
-              Controls the intensity of edge distortion
-            </p>
-          </div>
+          </button>
+        </div>
 
-          <div>
-            <span className="block text-sm font-semibold text-white/90 mb-3">
-              Blur Amount
-            </span>
-            <div className="mb-2">
-              <span className="text-xl font-mono text-green-300">
-                {blurAmount.toFixed(2)}
-              </span>
+        {/* Right Panel - Sliding Sidebar */}
+        <div
+          className={`h-full bg-gray-900/80 backdrop-blur-md border-l border-white/10 overflow-y-auto transition-all duration-500 ease-in-out flex flex-col ${
+            isPanelOpen
+              ? "w-[340px] opacity-100 p-8"
+              : "w-0 opacity-0 p-0 overflow-hidden border-none"
+          }`}
+        >
+          <div className="min-w-[276px]">
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-2xl font-bold text-white">稱謂練習</h2>
+              </div>
+              <p className="text-zinc-500 text-sm mb-10 italic"></p>
             </div>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-              value={blurAmount}
-              onChange={(e) => setBlurAmount(Number(e.target.value))}
-              className="w-full"
-            />
-            <p className="text-xs text-white/50 mt-2">
-              Controls backdrop blur intensity
-            </p>
-          </div>
 
-          <div>
-            <span className="block text-sm font-semibold text-white/90 mb-3">
-              Saturation
-            </span>
-            <div className="mb-2">
-              <span className="text-xl font-mono text-purple-300">
-                {saturation}%
-              </span>
-            </div>
-            <input
-              type="range"
-              min="100"
-              max="300"
-              step="10"
-              value={saturation}
-              onChange={(e) => setSaturation(Number(e.target.value))}
-              className="w-full"
-            />
-            <p className="text-xs text-white/50 mt-2">
-              Controls color saturation of the backdrop
-            </p>
-          </div>
+            <div className="space-y-8 flex-1 text-white">
+              {/* Controls copied from example logic */}
+              <div>
+                <span className="block text-sm font-semibold text-white/90 mb-3">
+                  Refraction Mode
+                </span>
+                <div className="space-y-2">
+                  {(["standard", "polar", "prominent", "shader"] as const).map(
+                    (m) => (
+                      <div key={m} className="flex items-center space-x-3">
+                        <input
+                          type="radio"
+                          id={`m-${m}`}
+                          name="mode"
+                          value={m}
+                          checked={mode === m}
+                          onChange={(e) => setMode(e.target.value as any)}
+                          className="w-4 h-4 accent-blue-500 cursor-pointer"
+                        />
+                        <label
+                          htmlFor={`m-${m}`}
+                          className="text-sm capitalize cursor-pointer hover:text-blue-400 transition-colors"
+                        >
+                          {m}
+                        </label>
+                      </div>
+                    ),
+                  )}
+                </div>
+              </div>
 
-          <div>
-            <span className="block text-sm font-semibold text-white/90 mb-3">
-              Chromatic Aberration
-            </span>
-            <div className="mb-2">
-              <span className="text-xl font-mono text-cyan-300">
-                {aberrationIntensity}
-              </span>
-            </div>
-            <input
-              type="range"
-              min="0"
-              max="20"
-              step="1"
-              value={aberrationIntensity}
-              onChange={(e) => setAberrationIntensity(Number(e.target.value))}
-              className="w-full"
-            />
-            <p className="text-xs text-white/50 mt-2">
-              Controls RGB channel separation intensity
-            </p>
-          </div>
+              <div>
+                <span className="block text-sm font-semibold mb-2">
+                  Displacement Scale ({displacementScale})
+                </span>
+                <input
+                  type="range"
+                  min="0"
+                  max="200"
+                  value={displacementScale}
+                  onChange={(e) => setDisplacementScale(Number(e.target.value))}
+                  className="w-full"
+                />
+              </div>
 
-          <div>
-            <span className="block text-sm font-semibold text-white/90 mb-3">
-              Elasticity
-            </span>
-            <div className="mb-2">
-              <span className="text-xl font-mono text-orange-300">
-                {elasticity.toFixed(2)}
-              </span>
-            </div>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              value={elasticity}
-              onChange={(e) => setElasticity(Number(e.target.value))}
-              className="w-full"
-            />
-            <p className="text-xs text-white/50 mt-2">
-              Controls how much the glass reaches toward the cursor
-            </p>
-          </div>
+              <div>
+                <span className="block text-sm font-semibold mb-2">
+                  Blur Amount ({blurAmount.toFixed(2)})
+                </span>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={blurAmount}
+                  onChange={(e) => setBlurAmount(Number(e.target.value))}
+                  className="w-full"
+                />
+              </div>
 
-          <div>
-            <span className="block text-sm font-semibold text-white/90 mb-3">
-              Corner Radius
-            </span>
-            <div className="mb-2">
-              <span className="text-xl font-mono text-pink-300">
-                {cornerRadius === 999 ? "Full" : `${cornerRadius}px`}
-              </span>
-            </div>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              step="1"
-              value={cornerRadius}
-              onChange={(e) => setCornerRadius(Number(e.target.value))}
-              className="w-full"
-            />
-            <p className="text-xs text-white/50 mt-2">
-              Controls the roundness of the glass corners
-            </p>
-          </div>
+              <div>
+                <span className="block text-sm font-semibold mb-2">
+                  Saturation ({saturation}%)
+                </span>
+                <input
+                  type="range"
+                  min="100"
+                  max="300"
+                  step="10"
+                  value={saturation}
+                  onChange={(e) => setSaturation(Number(e.target.value))}
+                  className="w-full"
+                />
+              </div>
 
-          <div>
-            <span className="block text-sm font-semibold text-white/90 mb-3">
-              Over Light
-            </span>
-            <div className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                id="overLight"
-                checked={overLight}
-                onChange={(e) => setOverLight(e.target.checked)}
-                className="w-5 h-5 accent-blue-500"
-              />
-              <label htmlFor="overLight" className="text-sm text-white/90">
-                Tint liquid glass dark (use for bright backgrounds)
-              </label>
+              <div>
+                <span className="block text-sm font-semibold mb-2">
+                  Chromatic Aberration ({aberrationIntensity})
+                </span>
+                <input
+                  type="range"
+                  min="0"
+                  max="20"
+                  step="1"
+                  value={aberrationIntensity}
+                  onChange={(e) =>
+                    setAberrationIntensity(Number(e.target.value))
+                  }
+                  className="w-full"
+                />
+              </div>
+
+              <div>
+                <span className="block text-sm font-semibold mb-2">
+                  Elasticity ({elasticity.toFixed(2)})
+                </span>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={elasticity}
+                  onChange={(e) => setElasticity(Number(e.target.value))}
+                  className="w-full"
+                />
+              </div>
+
+              <div>
+                <span className="block text-sm font-semibold mb-2">
+                  Corner Radius ({cornerRadius}px)
+                </span>
+
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={cornerRadius}
+                  onChange={(e) => setCornerRadius(Number(e.target.value))}
+                  className="w-full"
+                />
+              </div>
+
+              <div>
+                <span className="block text-sm font-semibold mb-3 text-white/90">
+                  Over Light
+                </span>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="overLight"
+                    checked={overLight}
+                    onChange={(e) => setOverLight(e.target.checked)}
+                    className="w-5 h-5 accent-blue-500 cursor-pointer"
+                  />
+                  <label
+                    htmlFor="overLight"
+                    className="text-sm cursor-pointer hover:text-blue-400 transition-colors"
+                  >
+                    Tint dark
+                  </label>
+                </div>
+              </div>
             </div>
-            <p className="text-xs text-white/50 mt-2">
-              Makes the glass darker for better visibility on light backgrounds
-            </p>
           </div>
         </div>
       </div>
-
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          20%, 60% { transform: translateX(-8px); }
-          40%, 80% { transform: translateX(8px); }
-        }
-      `,
-        }}
-      />
     </div>
   );
 }
