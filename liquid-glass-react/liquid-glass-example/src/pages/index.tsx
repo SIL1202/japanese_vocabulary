@@ -10,28 +10,34 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 type Screen = "start" | "quiz" | "result";
 
 export default function Home() {
+  // --- Background Logic ---
+  const [bgImage, setBgBgImage] = useState("");
+  useEffect(() => {
+    const originalImages = [
+      "https://picsum.photos/2000/2000",
+      "https://picsum.photos/1200/1200",
+      "https://picsum.photos/1400/1300",
+      "https://picsum.photos/1100/1200",
+    ];
+    const randomImg =
+      originalImages[Math.floor(Math.random() * originalImages.length)];
+    setBgBgImage(randomImg);
+  }, []);
+
   // --- Glass Controls ---
   const [displacementScale, setDisplacementScale] = useState(100);
-  const [blurAmount, setBlurAmount] = useState(0.5);
+  const [blurAmount, setBlurAmount] = useState(0.1);
   const [saturation, setSaturation] = useState(140);
   const [aberrationIntensity, setAberrationIntensity] = useState(2);
-  const [elasticity, setElasticity] = useState(0);
+  const [elasticity, setElasticity] = useState(0.15);
   const [cornerRadius, setCornerRadius] = useState(32);
   const [overLight, setOverLight] = useState(false);
   const [mode, setMode] = useState<
     "standard" | "polar" | "prominent" | "shader"
-  >("standard");
+  >("shader");
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const [scroll, setScroll] = useState(0);
-  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-    requestAnimationFrame(() => {
-      setScroll((event?.target as any)?.scrollTop);
-    });
-  };
-  const scrollingOverBrightSection = scroll > 230 && scroll < 500;
 
   // --- Quiz State ---
   const [screen, setScreen] = useState<Screen>("start");
@@ -47,6 +53,9 @@ export default function Home() {
 
   // result screen focused button for keyboard nav
   const [focusedBtn, setFocusedBtn] = useState(0);
+
+  // --- UI State ---
+  const [isPanelOpen, setIsPanelOpen] = useState(true);
 
   useEffect(() => {
     if (screen === "quiz") setTimeout(() => inputRef.current?.focus(), 100);
@@ -208,48 +217,13 @@ export default function Home() {
     <div
       className={`${geistSans.className} grid grid-cols-1 grid-rows-2 md:grid-rows-1 md:grid-cols-3 shadow-2xl w-full max-w-5xl mx-auto md:my-10 h-screen md:max-h-[calc(100vh-5rem)] md:rounded-3xl overflow-hidden`}
     >
-      {/* Left Panel */}
+      {/* Left Panel - Single Image Background */}
       <div
-        className="flex-1 relative overflow-auto min-h-screen md:col-span-2"
+        className="flex-1 relative min-h-screen md:col-span-2 bg-cover bg-center overflow-hidden"
         ref={containerRef}
-        onScroll={handleScroll}
+        style={{ backgroundImage: `url('${bgImage}')` }}
       >
-        <div className="w-full min-h-[200vh] absolute top-0 left-0 pb-96 mb-96">
-          <img
-            src="https://picsum.photos/2000/2000"
-            className="w-full h-96 object-cover"
-            alt=""
-          />
-          <div className="flex flex-col gap-2">
-            <h2 className="text-2xl font-semibold my-5 text-center">
-              Some Heading
-            </h2>
-            <p className="px-10">
-              Bacon ipsum dolor amet hamburger Bacon ipsum dolor amet hamburger{" "}
-              <br />
-              Bacon ipsum dolor amet hamburger Bacon ipsum dolor amet hamburger{" "}
-              <br />
-              Bacon ipsum dolor amet hamburger Bacon ipsum dolor amet hamburger{" "}
-              <br />
-              Bacon ipsum dolor amet hamburger Bacon ipsum dolor amet hamburger
-            </p>
-          </div>
-          <img
-            src="https://picsum.photos/1200/1200"
-            className="w-full h-80 object-cover my-10"
-            alt=""
-          />
-          <img
-            src="https://picsum.photos/1400/1300"
-            className="w-full h-72 object-cover my-10"
-            alt=""
-          />
-          <img
-            src="https://picsum.photos/1100/1200"
-            className="w-full h-96 object-cover my-10 mb-96"
-            alt=""
-          />
-        </div>
+        <div className="absolute inset-0 bg-black/10 pointer-events-none"></div>
 
         <LiquidGlass
           displacementScale={displacementScale}
@@ -259,24 +233,35 @@ export default function Home() {
           elasticity={elasticity}
           cornerRadius={cornerRadius}
           mouseContainer={containerRef}
-          overLight={scrollingOverBrightSection || overLight}
+          overLight={overLight}
           mode={mode}
           padding="0px"
           style={{
-            position: "fixed",
+            position: "absolute",
             top: "50%",
-            left: "33%",
-            // transform: "translate(-50%, -50%)",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            // minHeight: "460px", // 👈 在這裡加上最小高度
+            // width: "320px",
           }}
         >
           <div
             className={`w-80 min-h-[460px] flex flex-col justify-center transition-transform duration-300 ${isShaking ? "animate-[shake_0.3s_ease-in-out]" : ""}`}
-            style={{ borderRadius: `${cornerRadius}px`, padding: "2.5rem" }}
+            style={{
+              borderRadius: `${cornerRadius}px`,
+              padding: "2.5rem",
+              // 核心修正：強迫瀏覽器啟用硬體加速剪裁，把 HTML 的直角徹底消滅
+              overflow: "hidden",
+              transform: "translateZ(0)",
+              isolation: "isolate",
+            }}
           >
             {/* START */}
             {screen === "start" && (
               <>
-                <h3 className="text-xl font-semibold mb-4">稱謂練習</h3>
+                <h3 className="text-xl font-semibold mb-4 text-white">
+                  稱謂練習
+                </h3>
                 <p className="text-sm text-white/70 mb-6">
                   選擇您想要練習的題數：
                 </p>
@@ -297,7 +282,6 @@ export default function Home() {
                 </div>
               </>
             )}
-
             {/* QUIZ */}
             {screen === "quiz" && (
               <>
@@ -315,7 +299,7 @@ export default function Home() {
                         key={i}
                         className={
                           i <= lives
-                            ? "text-rose-500 drop-shadow-[0_0_6px_rgba(244,63,94,0.5)]"
+                            ? "text-rose-500 drop-shadow-[0_0_8px_rgba(244,63,94,0.5)]"
                             : "text-zinc-700"
                         }
                       >
@@ -356,11 +340,12 @@ export default function Home() {
                 </div>
               </>
             )}
-
             {/* RESULT */}
             {screen === "result" && (
               <>
-                <h3 className="text-xl font-semibold mb-4">練習結束！</h3>
+                <h3 className="text-xl font-semibold mb-4 text-white">
+                  練習結束！
+                </h3>
                 <div className="text-5xl font-bold text-white mb-3">
                   {accuracy}%
                 </div>
