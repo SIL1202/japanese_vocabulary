@@ -1,0 +1,561 @@
+import { useState, useRef, useEffect, useCallback } from "react";
+import LiquidGlass from "liquid-glass-react";
+import { Settings } from "lucide-react";
+import { WORD_BANK } from "./data/words";
+import type { Word } from "./data/words";
+
+type Screen = "start" | "quiz" | "result";
+
+export default function App() {
+  // --- Background Logic ---
+  const [bgImage, setBgBgImage] = useState("");
+  useEffect(() => {
+    const originalImages = [
+      "https://picsum.photos/2000/2000",
+      "https://picsum.photos/1200/1200",
+      "https://picsum.photos/1400/1300",
+      "https://picsum.photos/1100/1200",
+    ];
+    const randomImg =
+      originalImages[Math.floor(Math.random() * originalImages.length)];
+    setBgBgImage(randomImg);
+  }, []);
+
+  // --- Glass Controls ---
+  const [displacementScale, setDisplacementScale] = useState(100);
+  const [blurAmount, setBlurAmount] = useState(0.1);
+  const [saturation, setSaturation] = useState(140);
+  const [aberrationIntensity, setAberrationIntensity] = useState(2);
+  const [elasticity, setElasticity] = useState(0.5);
+  const [cornerRadius, setCornerRadius] = useState(50);
+  const [overLight, setOverLight] = useState(false);
+  const [mode, setMode] = useState<
+    "standard" | "polar" | "prominent" | "shader"
+  >("shader");
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // --- Quiz State ---
+  const [screen, setScreen] = useState<Screen>("start");
+  const [sessionWords, setSessionWords] = useState<Word[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [lives, setLives] = useState(3);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [mistakes, setMistakes] = useState<Word[]>([]);
+  const [inputValue, setInputValue] = useState("");
+  const [feedback, setFeedback] = useState({ text: "", type: "" });
+  const [isShaking, setIsShaking] = useState(false);
+  const [inputDisabled, setInputDisabled] = useState(false);
+
+  // result screen focused button for keyboard nav
+  const [focusedBtn, setFocusedBtn] = useState(0);
+
+  // --- UI State ---
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+
+  useEffect(() => {
+    if (screen === "quiz") setTimeout(() => inputRef.current?.focus(), 100);
+    if (screen !== "quiz") setFocusedBtn(0);
+  }, [screen]);
+
+  const startSession = useCallback((words: Word[]) => {
+    setSessionWords(words);
+    setCurrentIndex(0);
+    setLives(3);
+    setCorrectCount(0);
+    setMistakes([]);
+    setScreen("quiz");
+    setFeedback({ text: "", type: "" });
+    setInputDisabled(false);
+    setInputValue("");
+  }, []);
+
+  const beginSession = (count: number | "all") => {
+    const shuffled = [...WORD_BANK].sort(() => Math.random() - 0.5);
+    startSession(count === "all" ? shuffled : shuffled.slice(0, count));
+  };
+
+  const startReview = () => {
+    startSession([...mistakes]);
+  };
+
+  const nextQuestion = useCallback((idx: number, words: Word[]) => {
+    if (idx + 1 < words.length) {
+      setCurrentIndex(idx + 1);
+      setLives(3);
+      setInputValue("");
+      setFeedback({ text: "", type: "" });
+      setInputDisabled(false);
+      setTimeout(() => inputRef.current?.focus(), 10);
+    } else {
+      setScreen("result");
+    }
+  }, []);
+
+  const handleInputSubmit = (e: React.KeyboardEvent) => {
+    if (e.key !== "Enter" || (e.nativeEvent as any).isComposing) return;
+    const currentWord = sessionWords[currentIndex];
+    const userValue = inputValue
+      .trim()
+      .normalize("NFC")
+      .replace(/[\u200B-\u200D\uFEFF]/g, "");
+    if (userValue === "") return;
+
+    // Hiragana check
+    const hasJapanese = /[\u3040-\u309F\u30FC]/.test(userValue);
+    if (!hasJapanese) {
+      setFeedback({
+        text: "💡 提示：請使用「平假名」讀音輸入喔！",
+        type: "text-amber-400",
+      });
+      return;
+    }
+
+    if (userValue === currentWord.reading) {
+      setCorrectCount((prev) => prev + 1);
+      setFeedback({ text: "正解です！太棒了！", type: "text-emerald-400" });
+      setInputDisabled(true);
+      setTimeout(() => nextQuestion(currentIndex, sessionWords), 1200);
+    } else {
+      const newLives = lives - 1;
+      setLives(newLives);
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 300);
+      if (newLives <= 0) {
+        setMistakes((p) =>
+          p.some((w) => w.kanji === currentWord.kanji)
+            ? p
+            : [...p, currentWord],
+        );
+        setFeedback({
+          text: `機會用盡！正解是：【${currentWord.reading}】`,
+          type: "text-rose-400",
+        });
+        setInputDisabled(true);
+        setTimeout(() => nextQuestion(currentIndex, sessionWords), 2000);
+      } else {
+        setFeedback({
+          text: `殘念！讀音不對喔，剩餘 ${newLives} 次機會！`,
+          type: "text-rose-400",
+        });
+      }
+    }
+  };
+
+  const handleSkip = useCallback(() => {
+    const currentWord = sessionWords[currentIndex];
+    setMistakes((p) =>
+      p.some((w) => w.kanji === currentWord.kanji) ? p : [...p, currentWord],
+    );
+    nextQuestion(currentIndex, sessionWords);
+  }, [currentIndex, nextQuestion, sessionWords]);
+
+  // Keyboard navigation for start/result screens, Escape to skip on quiz
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (screen === "quiz") {
+        if (e.key === "Escape") handleSkip();
+        return;
+      }
+      const buttons =
+        screen === "start"
+          ? [
+              { action: () => beginSession(5) },
+              { action: () => beginSession(10) },
+              { action: () => beginSession("all") },
+            ]
+          : mistakes.length > 0
+            ? [
+                { action: startReview },
+                {
+                  action: () => {
+                    setScreen("start");
+                    setSessionWords([]);
+                    setMistakes([]);
+                  },
+                },
+              ]
+            : [
+                {
+                  action: () => {
+                    setScreen("start");
+                    setSessionWords([]);
+                    setMistakes([]);
+                  },
+                },
+              ];
+
+      if (e.key === "j")
+        setFocusedBtn((p) => Math.min(p + 1, buttons.length - 1));
+      else if (e.key === "k") setFocusedBtn((p) => Math.max(p - 1, 0));
+      else if (e.key === "Enter") buttons[focusedBtn]?.action();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [screen, focusedBtn, mistakes, sessionWords, currentIndex, handleSkip]);
+
+  const accuracy =
+    sessionWords.length > 0
+      ? Math.round((correctCount / sessionWords.length) * 100)
+      : 0;
+
+  const startBtns = [
+    { label: "5 題", action: () => beginSession(5) },
+    { label: "10 題", action: () => beginSession(10) },
+    { label: "所有題目", action: () => beginSession("all") },
+  ];
+  const resultBtns = [
+    ...(mistakes.length > 0
+      ? [
+          {
+            label: "複習錯誤題目",
+            action: startReview,
+            style:
+              "bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/30 text-amber-400",
+          },
+        ]
+      : []),
+    {
+      label: "重新開始",
+      action: () => {
+        setScreen("start");
+        setSessionWords([]);
+        setMistakes([]);
+      },
+      style: "bg-white/5 hover:bg-white/10 border-white/10 text-white",
+    },
+  ];
+
+  return (
+    <div
+      className={`relative w-full max-w-5xl mx-auto md:my-10 h-screen md:max-h-[calc(100vh-5rem)] md:rounded-3xl overflow-hidden shadow-2xl bg-black`}
+    >
+      <div className="flex h-full w-full">
+        {/* Left Panel - Single Image Background */}
+        <div
+          className="flex-1 relative bg-cover bg-center overflow-hidden transition-all duration-500"
+          ref={containerRef}
+          style={{ backgroundImage: `url('${bgImage}')` }}
+        >
+          <div className="absolute inset-0 bg-black/10 pointer-events-none"></div>
+
+          <LiquidGlass
+            displacementScale={displacementScale}
+            blurAmount={blurAmount}
+            saturation={saturation}
+            aberrationIntensity={aberrationIntensity}
+            elasticity={elasticity}
+            cornerRadius={cornerRadius}
+            mouseContainer={containerRef}
+            overLight={overLight}
+            mode={mode}
+            padding="0px"
+            style={{
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <div
+              className={`w-80 min-h-[460px] flex flex-col justify-center transition-transform duration-300 ${isShaking ? "animate-shake" : ""}`}
+              style={{
+                borderRadius: `${cornerRadius}px`,
+                padding: "2.5rem",
+              }}
+            >
+              {/* START */}
+              {screen === "start" && (
+                <>
+                  <h3 className="text-xl font-semibold mb-4 text-white">
+                    稱謂練習
+                  </h3>
+                  <p className="text-sm text-white/70 mb-6">
+                    選擇您想要練習的題數：
+                  </p>
+                  <div className="space-y-3">
+                    {startBtns.map((btn, i) => (
+                      <button
+                        key={btn.label}
+                        onClick={btn.action}
+                        className={`w-full border text-white px-6 py-4 rounded-2xl transition-all active:scale-95 ${
+                          focusedBtn === i
+                            ? "bg-white/10 border-amber-400/60 shadow-[0_0_15px_rgba(251,191,36,0.2)] scale-[1.02]"
+                            : "bg-white/5 hover:bg-white/10 border-white/10"
+                        }`}
+                      >
+                        {btn.label}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* QUIZ */}
+              {screen === "quiz" && (
+                <>
+                  <div className="mb-6">
+                    <div className="flex justify-between items-center text-xs tracking-widest text-white/50 uppercase font-semibold">
+                      <span>Vocabulary Test</span>
+                      <span className="font-mono">
+                        {(currentIndex + 1).toString().padStart(2, "0")} /{" "}
+                        {sessionWords.length.toString().padStart(2, "0")}
+                      </span>
+                    </div>
+                    <div className="flex justify-center gap-1.5 text-sm mt-3">
+                      {[1, 2, 3].map((i) => (
+                        <span
+                          key={i}
+                          className={
+                            i <= lives
+                              ? "text-rose-500 drop-shadow-[0_0_8px_rgba(244,63,94,0.5)]"
+                              : "text-zinc-700"
+                          }
+                        >
+                          {i <= lives ? "❤️" : "🖤"}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <h1 className="text-6xl font-bold text-white mb-3 tracking-tight">
+                    {sessionWords[currentIndex]?.kanji}
+                  </h1>
+                  <p className="text-white/50 text-sm mb-10 font-light">
+                    【{sessionWords[currentIndex]?.part}】
+                    {sessionWords[currentIndex]?.meaning}
+                  </p>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={inputValue}
+                    disabled={inputDisabled}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={handleInputSubmit}
+                    placeholder="輸入平假名讀音..."
+                    className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 text-xl text-center text-white placeholder-white/30 focus:outline-none focus:border-amber-400/40 transition-all shadow-inner"
+                  />
+                  <div
+                    className={`h-6 text-sm font-semibold mt-4 text-center tracking-wide ${feedback.type}`}
+                  >
+                    {feedback.text}
+                  </div>
+                  <div className="mt-6 text-center">
+                    <button
+                      onClick={handleSkip}
+                      className="bg-white/5 hover:bg-white/10 border border-white/10 text-white/50 hover:text-white text-xs tracking-widest uppercase font-medium px-6 py-3 rounded-full transition-all active:scale-95"
+                    >
+                      跳過此題
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {/* RESULT */}
+              {screen === "result" && (
+                <>
+                  <h3 className="text-xl font-semibold mb-4 text-white">
+                    練習結束！
+                  </h3>
+                  <div className="text-5xl font-bold text-white mb-3">
+                    {accuracy}%
+                  </div>
+                  <div className="text-white/50 text-sm mb-8 space-y-1">
+                    <p>完成題數：{sessionWords.length}</p>
+                    <p>正確答對：{correctCount} 題</p>
+                    <p>錯誤題目：{mistakes.length} 題</p>
+                  </div>
+                  <div className="space-y-3">
+                    {resultBtns.map((btn, i) => (
+                      <button
+                        key={btn.label}
+                        onClick={btn.action}
+                        className={`w-full border px-6 py-4 rounded-2xl transition-all active:scale-95 ${btn.style} ${
+                          focusedBtn === i
+                            ? "ring-2 ring-amber-400/60 scale-[1.02]"
+                            : ""
+                        }`}
+                      >
+                        {btn.label}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          </LiquidGlass>
+
+          {/* Sidebar Toggle Button */}
+          <button
+            onClick={() => setIsPanelOpen(!isPanelOpen)}
+            className={`absolute top-4 right-4 z-50 p-3 bg-black/40 backdrop-blur-xl border border-white/10 text-white rounded-full hover:bg-white/10 transition-all ${isPanelOpen ? "rotate-90 bg-blue-600/20 border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]" : ""}`}
+          >
+            <Settings
+              size={20}
+              className={isPanelOpen ? "animate-spin-slow" : ""}
+            />
+          </button>
+        </div>
+
+        {/* Right Panel - Sliding Sidebar */}
+        <div
+          className={`h-full bg-gray-900/80 backdrop-blur-md border-l border-white/10 overflow-y-auto transition-all duration-500 ease-in-out flex flex-col ${
+            isPanelOpen
+              ? "w-[340px] opacity-100 p-8"
+              : "w-0 opacity-0 p-0 overflow-hidden border-none"
+          }`}
+        >
+          <div className="min-w-[276px]">
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-2xl font-bold text-white">稱謂練習</h2>
+              </div>
+              <p className="text-zinc-500 text-sm mb-10 italic"></p>
+            </div>
+
+            <div className="space-y-8 flex-1 text-white">
+              <div>
+                <span className="block text-sm font-semibold text-white/90 mb-3">
+                  Refraction Mode
+                </span>
+                <div className="space-y-2">
+                  {(["standard", "polar", "prominent", "shader"] as const).map(
+                    (m) => (
+                      <div key={m} className="flex items-center space-x-3">
+                        <input
+                          type="radio"
+                          id={`m-${m}`}
+                          name="mode"
+                          value={m}
+                          checked={mode === m}
+                          onChange={(e) => setMode(e.target.value as any)}
+                          className="w-4 h-4 accent-blue-500 cursor-pointer"
+                        />
+                        <label
+                          htmlFor={`m-${m}`}
+                          className="text-sm capitalize cursor-pointer hover:text-blue-400 transition-colors"
+                        >
+                          {m}
+                        </label>
+                      </div>
+                    ),
+                  )}
+                </div>
+              </div>
+
+              <Slider
+                label="Displacement Scale"
+                value={displacementScale}
+                min={0}
+                max={200}
+                onChange={setDisplacementScale}
+                color="text-blue-300"
+              />
+              <Slider
+                label="Blur Amount"
+                value={blurAmount}
+                min={0}
+                max={1}
+                step={0.01}
+                onChange={setBlurAmount}
+                color="text-green-300"
+              />
+              <Slider
+                label="Saturation"
+                value={saturation}
+                min={100}
+                max={300}
+                step={10}
+                onChange={setSaturation}
+                suffix="%"
+                color="text-purple-300"
+              />
+              <Slider
+                label="Chromatic Aberration"
+                value={aberrationIntensity}
+                min={0}
+                max={20}
+                step={1}
+                onChange={setAberrationIntensity}
+                color="text-cyan-300"
+              />
+              <Slider
+                label="Elasticity"
+                value={elasticity}
+                min={0}
+                max={1}
+                step={0.05}
+                onChange={setElasticity}
+                color="text-orange-300"
+              />
+              <Slider
+                label="Corner Radius"
+                value={cornerRadius}
+                min={0}
+                max={100}
+                onChange={setCornerRadius}
+                suffix="px"
+                color="text-pink-300"
+              />
+
+              <div>
+                <span className="block text-sm font-semibold mb-3 text-white/90">
+                  Over Light
+                </span>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="overLight"
+                    checked={overLight}
+                    onChange={(e) => setOverLight(e.target.checked)}
+                    className="w-5 h-5 accent-blue-500 cursor-pointer"
+                  />
+                  <label
+                    htmlFor="overLight"
+                    className="text-sm cursor-pointer hover:text-blue-400 transition-colors"
+                  >
+                    Tint dark
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Slider({
+  label,
+  value,
+  min,
+  max,
+  step = 1,
+  onChange,
+  suffix = "",
+  color,
+}: any) {
+  return (
+    <div>
+      <div className="flex justify-between mb-3 text-[10px] uppercase tracking-widest text-zinc-500">
+        <span>{label}</span>
+        <span className={`font-mono ${color}`}>
+          {typeof value === "number" && label.includes("Blur")
+            ? value.toFixed(2)
+            : value}
+          {suffix}
+        </span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="w-full"
+      />
+    </div>
+  );
+}

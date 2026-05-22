@@ -1,4 +1,11 @@
-const WORD_BANK = [
+export interface Word {
+  kanji: string;
+  reading: string;
+  part: string;
+  meaning: string;
+}
+
+export const WORD_BANK: Word[] = [
   { kanji: "ご家族", reading: "ごかぞく", part: "名", meaning: "對方家人" },
   { kanji: "ご両親", reading: "ごりょうしん", part: "名", meaning: "對方父母" },
   { kanji: "お爺さん", reading: "おじいさん", part: "名", meaning: "爺爺" },
