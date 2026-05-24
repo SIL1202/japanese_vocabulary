@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import LiquidGlass from "liquid-glass-react";
-import { Settings } from "lucide-react";
-import { WORD_BANK } from "./data/words";
+import { Settings, FileText, CheckCircle2 } from "lucide-react";
 import type { Word } from "./data/words";
 
 type Screen = "start" | "quiz" | "result";
@@ -38,6 +37,8 @@ export default function App() {
 
   // --- Quiz State ---
   const [screen, setScreen] = useState<Screen>("start");
+  // 核心改動：改由動態管理目前的總單字庫，預設為空陣列
+  const [customWordBank, setCustomWordBank] = useState<Word[]>([]);
   const [sessionWords, setSessionWords] = useState<Word[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lives, setLives] = useState(3);
@@ -48,16 +49,98 @@ export default function App() {
   const [isShaking, setIsShaking] = useState(false);
   const [inputDisabled, setInputDisabled] = useState(false);
 
+  // --- Import Raw Text State (新功能) ---
+  const [rawText, setRawText] = useState("");
+  const [importMessage, setImportMessage] = useState("");
+
   // result screen focused button for keyboard nav
   const [focusedBtn, setFocusedBtn] = useState(0);
 
   // --- UI State ---
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
+  // 初始化時，先嘗試從 localStorage 讀取上次匯入的單字庫
+  useEffect(() => {
+    const saved = localStorage.getItem("shigure_words");
+    if (saved) {
+      try {
+        setCustomWordBank(JSON.parse(saved));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (screen === "quiz") setTimeout(() => inputRef.current?.focus(), 100);
     if (screen !== "quiz") setFocusedBtn(0);
   }, [screen]);
+
+  // --- 純前端免 LLM 快速解析邏輯 ---
+  const handleImportText = () => {
+    if (!rawText.trim()) return;
+
+    const lines = rawText.split("\n");
+    const parsedWords: Word[] = [];
+
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) return;
+
+      // 支援時雨之町常見的幾種複製格式 (Tab分隔、空格分隔、或直線|分隔)
+      // 將所有的連續空白、Tab、或 | 符號統一替換成一個特殊字元來切分
+      const tokens = trimmed
+        .replace(/[\t|]+/g, " ")
+        .split(/\s+/)
+        .map((t) => t.trim())
+        .filter(Boolean);
+
+      // 標準時雨複製格式一般會有 4 個主要欄位：漢字/語彙、讀音、詞性、中文
+      if (tokens.length >= 3) {
+        // 有些單字可能漢字和讀音相同（例如外來語），複製出來只有3欄
+        const hasPart = tokens.some(
+          (t) =>
+            t.includes("名") ||
+            t.includes("動") ||
+            t.includes("形") ||
+            t.includes("副"),
+        );
+
+        let kanji = tokens[0];
+        let reading = tokens[1];
+        let part = "單字";
+        let meaning = tokens[2];
+
+        if (tokens.length >= 4) {
+          part = tokens[2];
+          meaning = tokens.slice(3).join(" "); // 剩餘的通通當作中文解釋
+        } else if (hasPart && tokens.length === 3) {
+          // 如果只有三欄但中間有詞性
+          reading = tokens[0]; // 漢字跟讀音一樣
+          part = tokens[1];
+          meaning = tokens[2];
+        }
+
+        parsedWords.push({
+          kanji,
+          reading: reading.replace(/[\s]/g, ""), // 移除讀音中可能的空格
+          part,
+          meaning,
+        });
+      }
+    });
+
+    if (parsedWords.length > 0) {
+      const updatedBank = [...parsedWords];
+      setCustomWordBank(updatedBank);
+      localStorage.setItem("shigure_words", JSON.stringify(updatedBank));
+      setImportMessage(`🎉 成功解析並匯入 ${parsedWords.length} 個單字！`);
+      setRawText("");
+      setTimeout(() => setImportMessage(""), 4000);
+    } else {
+      setImportMessage("❌ 解析失敗，請確認貼上的文字格式。");
+    }
+  };
 
   const startSession = useCallback((words: Word[]) => {
     setSessionWords(words);
@@ -72,7 +155,11 @@ export default function App() {
   }, []);
 
   const beginSession = (count: number | "all") => {
-    const shuffled = [...WORD_BANK].sort(() => Math.random() - 0.5);
+    if (customWordBank.length === 0) {
+      alert("目前題庫空空如也！請先開啟右上角設定，貼入時雨之町的單字。");
+      return;
+    }
+    const shuffled = [...customWordBank].sort(() => Math.random() - 0.5);
     startSession(count === "all" ? shuffled : shuffled.slice(0, count));
   };
 
@@ -151,7 +238,7 @@ export default function App() {
     nextQuestion(currentIndex, sessionWords);
   }, [currentIndex, nextQuestion, sessionWords]);
 
-  // Keyboard navigation for start/result screens, Escape to skip on quiz
+  // Keyboard navigation
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (screen === "quiz") {
@@ -193,7 +280,7 @@ export default function App() {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [screen, focusedBtn, mistakes, sessionWords, currentIndex, handleSkip]);
+  }, [screen, focusedBtn, mistakes, customWordBank, currentIndex, handleSkip]);
 
   const accuracy =
     sessionWords.length > 0
@@ -232,7 +319,7 @@ export default function App() {
       className={`relative w-full max-w-5xl mx-auto md:my-10 h-screen md:max-h-[calc(100vh-5rem)] md:rounded-3xl overflow-hidden shadow-2xl bg-black`}
     >
       <div className="flex h-full w-full">
-        {/* Left Panel - Single Image Background */}
+        {/* Left Panel */}
         <div
           className="flex-1 relative bg-cover bg-center overflow-hidden transition-all duration-500"
           ref={containerRef}
@@ -268,9 +355,13 @@ export default function App() {
               {/* START */}
               {screen === "start" && (
                 <>
-                  <h3 className="text-xl font-semibold mb-4 text-white">
-                    稱謂練習
+                  <h3 className="text-xl font-semibold mb-1 text-white">
+                    時雨日文練習機
                   </h3>
+                  <div className="text-xs text-amber-400 mb-4 flex items-center gap-1">
+                    <CheckCircle2 size={12} /> 當前題庫：{customWordBank.length}{" "}
+                    個單字
+                  </div>
                   <p className="text-sm text-white/70 mb-6">
                     選擇您想要練習的題數：
                   </p>
@@ -318,7 +409,7 @@ export default function App() {
                       ))}
                     </div>
                   </div>
-                  <h1 className="text-6xl font-bold text-white mb-3 tracking-tight">
+                  <h1 className="text-5xl font-bold text-white mb-3 tracking-tight break-all">
                     {sessionWords[currentIndex]?.kanji}
                   </h1>
                   <p className="text-white/50 text-sm mb-10 font-light">
@@ -406,14 +497,39 @@ export default function App() {
           }`}
         >
           <div className="min-w-[276px]">
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="text-2xl font-bold text-white">稱謂練習</h2>
+            {/* 新功能區塊：時雨單字快速剪貼簿 */}
+            <div className="mb-8 p-4 bg-white/5 rounded-2xl border border-white/10">
+              <div className="flex items-center gap-2 mb-2 text-white">
+                <FileText size={18} className="text-amber-400" />
+                <h3 className="font-bold text-sm uppercase tracking-wider">
+                  時雨單字剪貼簿
+                </h3>
               </div>
-              <p className="text-zinc-500 text-sm mb-10 italic"></p>
+              <p className="text-xs text-zinc-400 mb-3 leading-relaxed">
+                直接至時雨之町網頁複製單字表，整塊貼在下方，系統將自動解析：
+              </p>
+              <textarea
+                value={rawText}
+                onChange={(e) => setRawText(e.target.value)}
+                placeholder="例如貼上：&#10;家族 かぞく 名 家人&#10;美味しい おいしい 形 美味"
+                rows={5}
+                className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 font-mono resize-none"
+              />
+              <button
+                onClick={handleImportText}
+                className="w-full mt-3 bg-amber-400 hover:bg-amber-500 text-black font-bold text-xs py-2.5 rounded-xl transition-all active:scale-95"
+              >
+                解析並匯入題庫
+              </button>
+              {importMessage && (
+                <div className="mt-2 text-xs font-semibold text-center text-amber-300 animate-pulse">
+                  {importMessage}
+                </div>
+              )}
             </div>
 
             <div className="space-y-8 flex-1 text-white">
+              {/* 原有的 Glass 參數設定維持不變 */}
               <div>
                 <span className="block text-sm font-semibold text-white/90 mb-3">
                   Refraction Mode
