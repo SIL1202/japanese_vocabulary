@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import LiquidGlass from "liquid-glass-react";
-import { Settings, FileText, CheckCircle2 } from "lucide-react";
+import { Settings, FileText, CheckCircle2, X, BookOpen } from "lucide-react";
 import type { Word } from "./data/words";
 
 type Screen = "start" | "quiz" | "result";
@@ -58,6 +58,7 @@ export default function App() {
 
   // --- UI State ---
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [isLibraryOpen, setIsLibraryOpen] = useState(false);
 
   // 初始化時，先嘗試從 localStorage 讀取上次匯入的單字庫
   useEffect(() => {
@@ -319,13 +320,91 @@ export default function App() {
       className={`relative w-full max-w-5xl mx-auto md:my-10 h-screen md:max-h-[calc(100vh-5rem)] md:rounded-3xl overflow-hidden shadow-2xl bg-black`}
     >
       <div className="flex h-full w-full">
-        {/* Left Panel */}
+        {/* Left Panel - Sliding Library */}
+        <div
+          className={`h-full bg-black/20 backdrop-blur-xl border-r border-white/10 overflow-y-auto transition-all duration-500 ease-in-out flex flex-col ${
+            isLibraryOpen
+              ? "w-[300px] opacity-100 p-6"
+              : "w-0 opacity-0 p-0 overflow-hidden border-none"
+          }`}
+        >
+          <div className="min-w-[250px]">
+            <div className="flex items-center justify-between mb-6 text-white">
+              <div className="flex items-center gap-2">
+                <BookOpen size={20} className="text-emerald-400" />
+                <h3 className="font-bold text-sm uppercase tracking-wider">
+                  單字題庫 ({customWordBank.length})
+                </h3>
+              </div>
+              {customWordBank.length > 0 && (
+                <button
+                  onClick={() => {
+                    if (confirm("確定要清空所有題庫嗎？")) {
+                      setCustomWordBank([]);
+                      localStorage.removeItem("shigure_words");
+                    }
+                  }}
+                  className="text-[10px] bg-red-500/20 hover:bg-red-500/40 text-red-400 px-2 py-1 rounded-md transition-colors"
+                >
+                  清空
+                </button>
+              )}
+            </div>
+
+            <div className="space-y-2 custom-scrollbar">
+              {customWordBank.length === 0 ? (
+                <div className="text-center py-10 text-zinc-500 text-xs">
+                  目前沒有單字，請從設定中匯入。
+                </div>
+              ) : (
+                customWordBank.map((word, i) => (
+                  <div
+                    key={i}
+                    className="p-3 bg-black/40 rounded-xl border border-white/5 text-[11px] group relative"
+                  >
+                    <button
+                      onClick={() => {
+                        const newBank = customWordBank.filter((_, idx) => idx !== i);
+                        setCustomWordBank(newBank);
+                        localStorage.setItem("shigure_words", JSON.stringify(newBank));
+                      }}
+                      className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:text-red-400"
+                    >
+                      <X size={10} />
+                    </button>
+                    <div className="flex justify-between items-start mb-1 pr-4">
+                      <span className="font-bold text-amber-200 text-sm">
+                        {word.kanji}
+                      </span>
+                      <span className="text-[9px] text-zinc-500 bg-zinc-800 px-1 rounded">
+                        {word.part}
+                      </span>
+                    </div>
+                    <div className="text-zinc-400">
+                      {word.reading} · {word.meaning}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Center Panel */}
         <div
           className="flex-1 relative bg-cover bg-center overflow-hidden transition-all duration-500"
           ref={containerRef}
           style={{ backgroundImage: `url('${bgImage}')` }}
         >
           <div className="absolute inset-0 bg-black/10 pointer-events-none"></div>
+
+          {/* Library Toggle Button */}
+          <button
+            onClick={() => setIsLibraryOpen(!isLibraryOpen)}
+            className={`absolute top-4 left-4 z-50 p-3 bg-black/40 backdrop-blur-xl border border-white/10 text-white rounded-full hover:bg-white/10 transition-all ${isLibraryOpen ? "bg-emerald-600/20 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]" : ""}`}
+          >
+            <BookOpen size={20} />
+          </button>
 
           <LiquidGlass
             displacementScale={displacementScale}
@@ -490,7 +569,7 @@ export default function App() {
 
         {/* Right Panel - Sliding Sidebar */}
         <div
-          className={`h-full bg-gray-900/80 backdrop-blur-md border-l border-white/10 overflow-y-auto transition-all duration-500 ease-in-out flex flex-col ${
+          className={`h-full bg-black/20 backdrop-blur-xl border-l border-white/10 overflow-y-auto transition-all duration-500 ease-in-out flex flex-col ${
             isPanelOpen
               ? "w-[340px] opacity-100 p-8"
               : "w-0 opacity-0 p-0 overflow-hidden border-none"
