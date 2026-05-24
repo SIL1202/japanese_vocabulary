@@ -379,9 +379,14 @@ export default function App() {
                   >
                     <button
                       onClick={() => {
-                        const newBank = customWordBank.filter((_, idx) => idx !== i);
+                        const newBank = customWordBank.filter(
+                          (_, idx) => idx !== i,
+                        );
                         setCustomWordBank(newBank);
-                        localStorage.setItem("shigure_words", JSON.stringify(newBank));
+                        localStorage.setItem(
+                          "shigure_words",
+                          JSON.stringify(newBank),
+                        );
                       }}
                       className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:text-red-400"
                     >
@@ -449,7 +454,7 @@ export default function App() {
               {screen === "start" && (
                 <>
                   <h3 className="text-xl font-semibold mb-1 text-white">
-                    時雨日文練習機
+                    日文練習機
                   </h3>
                   <div className="text-xs text-amber-400 mb-4 flex items-center gap-1">
                     <CheckCircle2 size={12} /> 當前題庫：{customWordBank.length}{" "}
@@ -599,11 +604,11 @@ export default function App() {
               <div className="flex items-center gap-2 mb-2 text-white">
                 <FileText size={18} className="text-amber-400" />
                 <h3 className="font-bold text-sm uppercase tracking-wider">
-                  時雨單字剪貼簿
+                  單字剪貼簿
                 </h3>
               </div>
               <p className="text-xs text-zinc-400 mb-3 leading-relaxed">
-                直接至時雨之町網頁複製單字表，整塊貼在下方，系統將自動解析：
+                複製單字表，整塊貼在下方，系統將自動解析：
               </p>
               <textarea
                 value={rawText}
