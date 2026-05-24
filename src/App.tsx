@@ -2,12 +2,15 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import LiquidGlass from "liquid-glass-react";
 import { Settings, FileText, CheckCircle2, X, BookOpen } from "lucide-react";
 import type { Word } from "./data/words";
+import { getAverageColor } from "./utils/color";
 
 type Screen = "start" | "quiz" | "result";
 
 export default function App() {
   // --- Background Logic ---
   const [bgImage, setBgBgImage] = useState("");
+  const [dominantColor, setDominantColor] = useState({ r: 0, g: 0, b: 0 });
+
   useEffect(() => {
     const originalImages = [
       "https://picsum.photos/2000/2000",
@@ -18,6 +21,10 @@ export default function App() {
     const randomImg =
       originalImages[Math.floor(Math.random() * originalImages.length)];
     setBgBgImage(randomImg);
+
+    getAverageColor(randomImg).then((color) => {
+      setDominantColor(color);
+    });
   }, []);
 
   // --- Glass Controls ---
@@ -317,16 +324,24 @@ export default function App() {
 
   return (
     <div
-      className={`relative w-full max-w-5xl mx-auto md:my-10 h-screen md:max-h-[calc(100vh-5rem)] md:rounded-3xl overflow-hidden shadow-2xl bg-black`}
+      className={`relative w-full max-w-5xl mx-auto md:my-10 h-screen md:max-h-[calc(100vh-5rem)] md:rounded-3xl overflow-hidden shadow-2xl bg-black bg-cover bg-center transition-all duration-700`}
+      style={{
+        backgroundImage: `url('${bgImage}')`,
+        ["--dominant-rgb" as any]: `${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b}`,
+      }}
     >
       <div className="flex h-full w-full">
         {/* Left Panel - Sliding Library */}
         <div
-          className={`h-full bg-black/20 backdrop-blur-xl border-r border-white/10 overflow-y-auto transition-all duration-500 ease-in-out flex flex-col ${
+          className={`h-full border-r border-white/10 overflow-y-auto transition-all duration-500 ease-in-out flex flex-col ${
             isLibraryOpen
               ? "w-[300px] opacity-100 p-6"
               : "w-0 opacity-0 p-0 overflow-hidden border-none"
           }`}
+          style={{
+            backgroundColor: `rgba(var(--dominant-rgb), 0.25)`,
+            backdropFilter: "blur(24px)",
+          }}
         >
           <div className="min-w-[250px]">
             <div className="flex items-center justify-between mb-6 text-white">
@@ -392,9 +407,8 @@ export default function App() {
 
         {/* Center Panel */}
         <div
-          className="flex-1 relative bg-cover bg-center overflow-hidden transition-all duration-500"
+          className="flex-1 relative overflow-hidden transition-all duration-500"
           ref={containerRef}
-          style={{ backgroundImage: `url('${bgImage}')` }}
         >
           <div className="absolute inset-0 bg-black/10 pointer-events-none"></div>
 
@@ -569,11 +583,15 @@ export default function App() {
 
         {/* Right Panel - Sliding Sidebar */}
         <div
-          className={`h-full bg-black/20 backdrop-blur-xl border-l border-white/10 overflow-y-auto transition-all duration-500 ease-in-out flex flex-col ${
+          className={`h-full border-l border-white/10 overflow-y-auto transition-all duration-500 ease-in-out flex flex-col ${
             isPanelOpen
               ? "w-[340px] opacity-100 p-8"
               : "w-0 opacity-0 p-0 overflow-hidden border-none"
           }`}
+          style={{
+            backgroundColor: `rgba(var(--dominant-rgb), 0.3)`,
+            backdropFilter: "blur(24px)",
+          }}
         >
           <div className="min-w-[276px]">
             {/* 新功能區塊：時雨單字快速剪貼簿 */}
