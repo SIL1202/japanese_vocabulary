@@ -69,34 +69,55 @@ export default function App() {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
 
-  // 初始化時，先嘗試從 localStorage 讀取上次匯入的單字庫
+  // 同步資料到後端
+  const syncWithBackend = async (data: Collection[]) => {
+    try {
+      await fetch("http://localhost:3001/api/collections", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+    } catch (error) {
+      console.error("Failed to sync with backend:", error);
+    }
+  };
+
+  const updateCollections = (newCollections: Collection[]) => {
+    setCustomWordBank(newCollections);
+    syncWithBackend(newCollections);
+    localStorage.setItem("shigure_words", JSON.stringify(newCollections));
+  };
+
+  // 初始化時，優先從後端讀取單字庫
   useEffect(() => {
-    const saved = localStorage.getItem("shigure_words");
-    if (saved) {
+    const loadCollections = async () => {
       try {
-        const parsed = JSON.parse(saved);
-        // Migration: If it's an old flat array, wrap it in a default collection
-        if (
-          Array.isArray(parsed) &&
-          parsed.length > 0 &&
-          !("words" in parsed[0])
-        ) {
-          const migrated: Collection[] = [
-            {
-              id: Date.now().toString(),
-              name: "預設題庫",
-              words: parsed as Word[],
-            },
-          ];
-          setCustomWordBank(migrated);
-          localStorage.setItem("shigure_words", JSON.stringify(migrated));
+        const response = await fetch("http://localhost:3001/api/collections");
+        if (response.ok) {
+          const data = await response.json();
+          setCustomWordBank(data);
         } else {
-          setCustomWordBank(parsed);
+          throw new Error("Backend unavailable");
         }
       } catch (e) {
-        console.error(e);
+        console.warn("後端連線失敗，改從 localStorage 讀取", e);
+        const saved = localStorage.getItem("shigure_words");
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length > 0 && !("words" in parsed[0])) {
+              const migrated: Collection[] = [{ id: Date.now().toString(), name: "預設題庫", words: parsed }];
+              updateCollections(migrated);
+            } else {
+              setCustomWordBank(parsed);
+            }
+          } catch (err) {
+            console.error(err);
+          }
+        }
       }
-    }
+    };
+    loadCollections();
   }, []);
 
   useEffect(() => {
@@ -183,8 +204,7 @@ export default function App() {
         });
       }
 
-      setCustomWordBank(updatedBank);
-      localStorage.setItem("shigure_words", JSON.stringify(updatedBank));
+      updateCollections(updatedBank);
       setImportMessage(`🎉 成功匯入 ${parsedWords.length} 個單字！`);
       setRawText("");
       setImportFolderName("");
@@ -293,16 +313,14 @@ export default function App() {
 
   const handleClearAll = () => {
     if (confirm("確定要清空所有題庫嗎？")) {
-      setCustomWordBank([]);
-      localStorage.removeItem("shigure_words");
+      updateCollections([]);
     }
   };
 
   const handleDeleteCollection = (id: string) => {
     if (confirm("確定要刪除整個資料夾嗎？")) {
       const updated = customWordBank.filter((c) => c.id !== id);
-      setCustomWordBank(updated);
-      localStorage.setItem("shigure_words", JSON.stringify(updated));
+      updateCollections(updated);
     }
   };
 
@@ -316,8 +334,7 @@ export default function App() {
       }
       return c;
     });
-    setCustomWordBank(updated);
-    localStorage.setItem("shigure_words", JSON.stringify(updated));
+    updateCollections(updated);
   };
 
   // Keyboard navigation
