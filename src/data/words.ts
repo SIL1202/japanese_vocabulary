@@ -5,6 +5,12 @@ export interface Word {
   meaning: string;
 }
 
+export interface Collection {
+  id: string;
+  name: string;
+  words: Word[];
+}
+
 export const WORD_BANK: Word[] = [
   { kanji: "ご家族", reading: "ごかぞく", part: "名", meaning: "對方家人" },
   { kanji: "ご両親", reading: "ごりょうしん", part: "名", meaning: "對方父母" },

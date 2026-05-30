@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import LiquidGlass from "liquid-glass-react";
-import { Settings, FileText, CheckCircle2, X, BookOpen } from "lucide-react";
-import type { Word } from "./data/words";
+import { Settings, FileText, CheckCircle2, X, BookOpen, FolderPlus } from "lucide-react";
+import type { Word, Collection } from "./data/words";
 import { getAverageColor } from "./utils/color";
+import Library from "./components/Library";
 
 type Screen = "start" | "quiz" | "result";
 
@@ -45,7 +46,7 @@ export default function App() {
   // --- Quiz State ---
   const [screen, setScreen] = useState<Screen>("start");
   // 核心改動：改由動態管理目前的總單字庫，預設為空陣列
-  const [customWordBank, setCustomWordBank] = useState<Word[]>([]);
+  const [customWordBank, setCustomWordBank] = useState<Collection[]>([]);
   const [sessionWords, setSessionWords] = useState<Word[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lives, setLives] = useState(3);
@@ -58,6 +59,7 @@ export default function App() {
 
   // --- Import Raw Text State (新功能) ---
   const [rawText, setRawText] = useState("");
+  const [importFolderName, setImportFolderName] = useState("");
   const [importMessage, setImportMessage] = useState("");
 
   // result screen focused button for keyboard nav
@@ -72,7 +74,25 @@ export default function App() {
     const saved = localStorage.getItem("shigure_words");
     if (saved) {
       try {
-        setCustomWordBank(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        // Migration: If it's an old flat array, wrap it in a default collection
+        if (
+          Array.isArray(parsed) &&
+          parsed.length > 0 &&
+          !("words" in parsed[0])
+        ) {
+          const migrated: Collection[] = [
+            {
+              id: Date.now().toString(),
+              name: "預設題庫",
+              words: parsed as Word[],
+            },
+          ];
+          setCustomWordBank(migrated);
+          localStorage.setItem("shigure_words", JSON.stringify(migrated));
+        } else {
+          setCustomWordBank(parsed);
+        }
       } catch (e) {
         console.error(e);
       }
@@ -105,8 +125,11 @@ export default function App() {
 
       // 標準時雨複製格式一般會有 4 個主要欄位：漢字/語彙、讀音、詞性、中文
       if (tokens.length >= 3) {
+        // 移除 tokens 中的重音標記，例如 [0], [3][2]
+        const cleanTokens = tokens.filter(t => !/^\[\d+\]+$/.test(t));
+        
         // 有些單字可能漢字和讀音相同（例如外來語），複製出來只有3欄
-        const hasPart = tokens.some(
+        const hasPart = cleanTokens.some(
           (t) =>
             t.includes("名") ||
             t.includes("動") ||
@@ -114,19 +137,19 @@ export default function App() {
             t.includes("副"),
         );
 
-        let kanji = tokens[0];
-        let reading = tokens[1];
+        let kanji = cleanTokens[0];
+        let reading = cleanTokens[1];
         let part = "單字";
-        let meaning = tokens[2];
+        let meaning = cleanTokens[2];
 
-        if (tokens.length >= 4) {
-          part = tokens[2];
-          meaning = tokens.slice(3).join(" "); // 剩餘的通通當作中文解釋
-        } else if (hasPart && tokens.length === 3) {
+        if (cleanTokens.length >= 4) {
+          part = cleanTokens[2];
+          meaning = cleanTokens.slice(3).join(" "); // 剩餘的通通當作中文解釋
+        } else if (hasPart && cleanTokens.length === 3) {
           // 如果只有三欄但中間有詞性
-          reading = tokens[0]; // 漢字跟讀音一樣
-          part = tokens[1];
-          meaning = tokens[2];
+          reading = cleanTokens[0]; // 漢字跟讀音一樣
+          part = cleanTokens[1];
+          meaning = cleanTokens[2];
         }
 
         parsedWords.push({
@@ -139,11 +162,32 @@ export default function App() {
     });
 
     if (parsedWords.length > 0) {
-      const updatedBank = [...parsedWords];
+      const folderName = importFolderName.trim() || "未命名題庫";
+      let updatedBank = [...customWordBank];
+      const existingFolderIdx = updatedBank.findIndex(
+        (f) => f.name === folderName,
+      );
+
+      if (existingFolderIdx !== -1) {
+        // Append to existing folder
+        updatedBank[existingFolderIdx] = {
+          ...updatedBank[existingFolderIdx],
+          words: [...updatedBank[existingFolderIdx].words, ...parsedWords],
+        };
+      } else {
+        // Create new folder
+        updatedBank.push({
+          id: Date.now().toString(),
+          name: folderName,
+          words: parsedWords,
+        });
+      }
+
       setCustomWordBank(updatedBank);
       localStorage.setItem("shigure_words", JSON.stringify(updatedBank));
-      setImportMessage(`🎉 成功解析並匯入 ${parsedWords.length} 個單字！`);
+      setImportMessage(`🎉 成功匯入 ${parsedWords.length} 個單字！`);
       setRawText("");
+      setImportFolderName("");
       setTimeout(() => setImportMessage(""), 4000);
     } else {
       setImportMessage("❌ 解析失敗，請確認貼上的文字格式。");
@@ -163,11 +207,12 @@ export default function App() {
   }, []);
 
   const beginSession = (count: number | "all") => {
-    if (customWordBank.length === 0) {
+    const allWords = customWordBank.flatMap((c) => c.words);
+    if (allWords.length === 0) {
       alert("目前題庫空空如也！請先開啟右上角設定，貼入時雨之町的單字。");
       return;
     }
-    const shuffled = [...customWordBank].sort(() => Math.random() - 0.5);
+    const shuffled = [...allWords].sort(() => Math.random() - 0.5);
     startSession(count === "all" ? shuffled : shuffled.slice(0, count));
   };
 
@@ -245,6 +290,35 @@ export default function App() {
     );
     nextQuestion(currentIndex, sessionWords);
   }, [currentIndex, nextQuestion, sessionWords]);
+
+  const handleClearAll = () => {
+    if (confirm("確定要清空所有題庫嗎？")) {
+      setCustomWordBank([]);
+      localStorage.removeItem("shigure_words");
+    }
+  };
+
+  const handleDeleteCollection = (id: string) => {
+    if (confirm("確定要刪除整個資料夾嗎？")) {
+      const updated = customWordBank.filter((c) => c.id !== id);
+      setCustomWordBank(updated);
+      localStorage.setItem("shigure_words", JSON.stringify(updated));
+    }
+  };
+
+  const handleDeleteWord = (collectionId: string, wordIndex: number) => {
+    const updated = customWordBank.map((c) => {
+      if (c.id === collectionId) {
+        return {
+          ...c,
+          words: c.words.filter((_, i) => i !== wordIndex),
+        };
+      }
+      return c;
+    });
+    setCustomWordBank(updated);
+    localStorage.setItem("shigure_words", JSON.stringify(updated));
+  };
 
   // Keyboard navigation
   useEffect(() => {
@@ -332,83 +406,14 @@ export default function App() {
     >
       <div className="flex h-full w-full">
         {/* Left Panel - Sliding Library */}
-        <div
-          className={`h-full border-r border-white/10 overflow-y-auto transition-all duration-500 ease-in-out flex flex-col ${
-            isLibraryOpen
-              ? "w-[300px] opacity-100 p-6"
-              : "w-0 opacity-0 p-0 overflow-hidden border-none"
-          }`}
-          style={{
-            backgroundColor: `rgba(var(--dominant-rgb), 0.25)`,
-            backdropFilter: "blur(24px)",
-          }}
-        >
-          <div className="min-w-[250px]">
-            <div className="flex items-center justify-between mb-6 text-white">
-              <div className="flex items-center gap-2">
-                <BookOpen size={20} className="text-emerald-400" />
-                <h3 className="font-bold text-sm uppercase tracking-wider">
-                  單字題庫 ({customWordBank.length})
-                </h3>
-              </div>
-              {customWordBank.length > 0 && (
-                <button
-                  onClick={() => {
-                    if (confirm("確定要清空所有題庫嗎？")) {
-                      setCustomWordBank([]);
-                      localStorage.removeItem("shigure_words");
-                    }
-                  }}
-                  className="text-[10px] bg-red-500/20 hover:bg-red-500/40 text-red-400 px-2 py-1 rounded-md transition-colors"
-                >
-                  清空
-                </button>
-              )}
-            </div>
-
-            <div className="space-y-2 custom-scrollbar">
-              {customWordBank.length === 0 ? (
-                <div className="text-center py-10 text-zinc-500 text-xs">
-                  目前沒有單字，請從設定中匯入。
-                </div>
-              ) : (
-                customWordBank.map((word, i) => (
-                  <div
-                    key={i}
-                    className="p-3 bg-black/40 rounded-xl border border-white/5 text-[11px] group relative"
-                  >
-                    <button
-                      onClick={() => {
-                        const newBank = customWordBank.filter(
-                          (_, idx) => idx !== i,
-                        );
-                        setCustomWordBank(newBank);
-                        localStorage.setItem(
-                          "shigure_words",
-                          JSON.stringify(newBank),
-                        );
-                      }}
-                      className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:text-red-400"
-                    >
-                      <X size={10} />
-                    </button>
-                    <div className="flex justify-between items-start mb-1 pr-4">
-                      <span className="font-bold text-amber-200 text-sm">
-                        {word.kanji}
-                      </span>
-                      <span className="text-[9px] text-zinc-500 bg-zinc-800 px-1 rounded">
-                        {word.part}
-                      </span>
-                    </div>
-                    <div className="text-zinc-400">
-                      {word.reading} · {word.meaning}
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
+        <Library
+          isOpen={isLibraryOpen}
+          collections={customWordBank}
+          dominantColor={dominantColor}
+          onDeleteWord={handleDeleteWord}
+          onDeleteCollection={handleDeleteCollection}
+          onClearAll={handleClearAll}
+        />
 
         {/* Center Panel */}
         <div
@@ -610,6 +615,20 @@ export default function App() {
               <p className="text-xs text-zinc-400 mb-3 leading-relaxed">
                 複製單字表，整塊貼在下方，系統將自動解析：
               </p>
+
+              <div className="relative mb-3">
+                <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-zinc-500">
+                  <FolderPlus size={14} />
+                </div>
+                <input
+                  type="text"
+                  value={importFolderName}
+                  onChange={(e) => setImportFolderName(e.target.value)}
+                  placeholder="題庫名稱 (可選)"
+                  className="w-full bg-black/60 border border-white/10 rounded-xl py-2 pl-9 pr-3 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-all"
+                />
+              </div>
+
               <textarea
                 value={rawText}
                 onChange={(e) => setRawText(e.target.value)}
