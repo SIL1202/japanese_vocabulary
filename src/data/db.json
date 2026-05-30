@@ -1,27 +1,476 @@
 [
   {
-    "id": "initial-collection",
-    "name": "預設題庫",
+    "id": "1780126682098",
+    "name": "家族",
     "words": [
-      { "kanji": "ご家族", "reading": "ごかぞく", "part": "名", "meaning": "對方家人" },
-      { "kanji": "ご兩親", "reading": "ごりょうしん", "part": "名", "meaning": "對方父母" },
-      { "kanji": "お爺さん", "reading": "おじいさん", "part": "名", "meaning": "爺爺" },
-      { "kanji": "お婆算", "reading": "おばあさん", "part": "名", "meaning": "奶奶" },
-      { "kanji": "お父さん", "reading": "おとうさん", "part": "名", "meaning": "爸爸" },
-      { "kanji": "お母さん", "reading": "おかあさん", "part": "名", "meaning": "媽媽" },
-      { "kanji": "叔父さん", "reading": "おじさん", "part": "名", "meaning": "叔叔/伯父" },
-      { "kanji": "叔母さん", "reading": "おばさん", "part": "名", "meaning": "阿姨/伯母" },
-      { "kanji": "ご主人", "reading": "ごしゅじん", "part": "名", "meaning": "對方的先生" },
-      { "kanji": "奥さん", "reading": "おくさん", "part": "名", "meaning": "對方的太太" },
-      { "kanji": "ご兄弟", "reading": "ごきょうだい", "part": "名", "meaning": "兄弟姊妹" },
-      { "kanji": "ご姊妹", "reading": "ごしまい", part: "名", "meaning": "姊妹" },
-      { "kanji": "お兄さん", "reading": "おにいさん", "part": "名", "meaning": "哥哥" },
-      { "kanji": "お姉さん", "reading": "おねえさん", "part": "名", "meaning": "姊姊" },
-      { "kanji": "弟さん", "reading": "おとうとさん", "part": "名", "meaning": "弟弟" },
-      { "kanji": "妹さん", "reading": "いもうとさん", "part": "名", "meaning": "妹妹" },
-      { "kanji": "お子さん", "reading": "おこさん", "part": "名", "meaning": "孩子" },
-      { "kanji": "息子さん", "reading": "むすこさん", "part": "名", "meaning": "兒子" },
-      { "kanji": "娘さん", "reading": "むすめさん", "part": "名", "meaning": "女兒" }
+      {
+        "kanji": "家族",
+        "reading": "かぞく",
+        "part": "單字",
+        "meaning": "家人"
+      },
+      {
+        "kanji": "両親",
+        "reading": "りょうしん",
+        "part": "單字",
+        "meaning": "父母"
+      },
+      {
+        "kanji": "祖父",
+        "reading": "そふ",
+        "part": "單字",
+        "meaning": "爺爺／祖父／阿公"
+      },
+      {
+        "kanji": "祖母",
+        "reading": "そぼ",
+        "part": "單字",
+        "meaning": "奶奶／祖母／阿嬤"
+      },
+      {
+        "kanji": "父",
+        "reading": "ちち",
+        "part": "[1][2]",
+        "meaning": "爸爸"
+      },
+      {
+        "kanji": "母",
+        "reading": "はは",
+        "part": "單字",
+        "meaning": "媽媽"
+      },
+      {
+        "kanji": "叔父／伯父",
+        "reading": "おじ",
+        "part": "單字",
+        "meaning": "叔父／伯父／叔叔"
+      },
+      {
+        "kanji": "叔母／伯母",
+        "reading": "おば",
+        "part": "單字",
+        "meaning": "叔母／伯母／阿姨"
+      },
+      {
+        "kanji": "夫",
+        "reading": "おっと",
+        "part": "單字",
+        "meaning": "自己的先生"
+      },
+      {
+        "kanji": "妻",
+        "reading": "つま",
+        "part": "單字",
+        "meaning": "自己的太太"
+      },
+      {
+        "kanji": "兄弟",
+        "reading": "きょうだい",
+        "part": "單字",
+        "meaning": "兄弟姊妹"
+      },
+      {
+        "kanji": "姉妹",
+        "reading": "しまい",
+        "part": "單字",
+        "meaning": "姊妹"
+      },
+      {
+        "kanji": "兄",
+        "reading": "あに",
+        "part": "單字",
+        "meaning": "哥哥"
+      },
+      {
+        "kanji": "姉",
+        "reading": "あね",
+        "part": "單字",
+        "meaning": "姊姊"
+      },
+      {
+        "kanji": "弟",
+        "reading": "おとうと",
+        "part": "單字",
+        "meaning": "弟弟"
+      },
+      {
+        "kanji": "妹",
+        "reading": "いもうと",
+        "part": "單字",
+        "meaning": "妹妹"
+      },
+      {
+        "kanji": "息子",
+        "reading": "むすこ",
+        "part": "單字",
+        "meaning": "兒子"
+      },
+      {
+        "kanji": "娘",
+        "reading": "むすめ",
+        "part": "單字",
+        "meaning": "女兒"
+      },
+      {
+        "kanji": "孫",
+        "reading": "まご",
+        "part": "單字",
+        "meaning": "孫子"
+      },
+      {
+        "kanji": "従兄弟",
+        "reading": "いとこ",
+        "part": "單字",
+        "meaning": "堂表兄弟姊妹"
+      },
+      {
+        "kanji": "甥",
+        "reading": "おい",
+        "part": "單字",
+        "meaning": "外甥男／姪子"
+      },
+      {
+        "kanji": "姪",
+        "reading": "めい",
+        "part": "[0][1]",
+        "meaning": "外甥女／姪女"
+      },
+      {
+        "kanji": "義父",
+        "reading": "ぎふ",
+        "part": "單字",
+        "meaning": "岳父／繼父／養父"
+      },
+      {
+        "kanji": "義母",
+        "reading": "ぎぼ",
+        "part": "單字",
+        "meaning": "岳母／繼母／養母"
+      },
+      {
+        "kanji": "花婿",
+        "reading": "はなむこ",
+        "part": "單字",
+        "meaning": "新郎"
+      },
+      {
+        "kanji": "花嫁",
+        "reading": "はなよめ",
+        "part": "單字",
+        "meaning": "新娘"
+      },
+      {
+        "kanji": "ご家族",
+        "reading": "ごかぞく",
+        "part": "單字",
+        "meaning": "對方家人"
+      },
+      {
+        "kanji": "ご両親",
+        "reading": "ごりょうしん",
+        "part": "單字",
+        "meaning": "對方父母"
+      },
+      {
+        "kanji": "お爺さん",
+        "reading": "おじいさん",
+        "part": "單字",
+        "meaning": "爺爺"
+      },
+      {
+        "kanji": "お婆さん",
+        "reading": "おばあさん",
+        "part": "單字",
+        "meaning": "奶奶"
+      },
+      {
+        "kanji": "お父さん",
+        "reading": "おとうさん",
+        "part": "單字",
+        "meaning": "爸爸"
+      },
+      {
+        "kanji": "お母さん",
+        "reading": "おかあさん",
+        "part": "單字",
+        "meaning": "媽媽"
+      },
+      {
+        "kanji": "叔父さん",
+        "reading": "おじさん",
+        "part": "單字",
+        "meaning": "叔父／伯父／叔叔"
+      },
+      {
+        "kanji": "叔母さん",
+        "reading": "おばさん",
+        "part": "單字",
+        "meaning": "叔母／伯母／阿姨"
+      },
+      {
+        "kanji": "ご主人",
+        "reading": "ごしゅじん",
+        "part": "單字",
+        "meaning": "對方的先生"
+      },
+      {
+        "kanji": "奥さん",
+        "reading": "おくさん",
+        "part": "單字",
+        "meaning": "對方的太太"
+      },
+      {
+        "kanji": "ご兄弟",
+        "reading": "ごきょうだい",
+        "part": "單字",
+        "meaning": "兄弟姊妹"
+      },
+      {
+        "kanji": "ご姉妹",
+        "reading": "ごしまい",
+        "part": "單字",
+        "meaning": "姊妹"
+      },
+      {
+        "kanji": "お兄さん",
+        "reading": "おにいさん",
+        "part": "單字",
+        "meaning": "哥哥"
+      },
+      {
+        "kanji": "お姉さん",
+        "reading": "おねえさん",
+        "part": "單字",
+        "meaning": "姊姊"
+      },
+      {
+        "kanji": "弟さん",
+        "reading": "おとうとさん",
+        "part": "單字",
+        "meaning": "弟弟"
+      },
+      {
+        "kanji": "妹さん",
+        "reading": "いもうとさん",
+        "part": "單字",
+        "meaning": "妹妹"
+      },
+      {
+        "kanji": "お子さん",
+        "reading": "おこさん",
+        "part": "單字",
+        "meaning": "孩子"
+      },
+      {
+        "kanji": "息子さん",
+        "reading": "むすこさん",
+        "part": "單字",
+        "meaning": "兒子"
+      },
+      {
+        "kanji": "娘さん",
+        "reading": "むすめさん",
+        "part": "單字",
+        "meaning": "女兒"
+      }
+    ]
+  },
+  {
+    "id": "1780130351224",
+    "name": "身體部位",
+    "words": [
+      {
+        "kanji": "体",
+        "reading": "からだ",
+        "part": "單字",
+        "meaning": "身體"
+      },
+      {
+        "kanji": "頭",
+        "reading": "あたま",
+        "part": "[3][2]",
+        "meaning": "頭／頭腦"
+      },
+      {
+        "kanji": "髪",
+        "reading": "かみ",
+        "part": "單字",
+        "meaning": "頭髮"
+      },
+      {
+        "kanji": "顔",
+        "reading": "かお",
+        "part": "單字",
+        "meaning": "臉、顏面"
+      },
+      {
+        "kanji": "目",
+        "reading": "め",
+        "part": "單字",
+        "meaning": "眼睛"
+      },
+      {
+        "kanji": "耳",
+        "reading": "みみ",
+        "part": "單字",
+        "meaning": "耳朵"
+      },
+      {
+        "kanji": "鼻",
+        "reading": "はな",
+        "part": "單字",
+        "meaning": "鼻子"
+      },
+      {
+        "kanji": "喉",
+        "reading": "のど",
+        "part": "單字",
+        "meaning": "喉嚨"
+      },
+      {
+        "kanji": "口",
+        "reading": "くち",
+        "part": "單字",
+        "meaning": "嘴巴"
+      },
+      {
+        "kanji": "歯",
+        "reading": "は",
+        "part": "單字",
+        "meaning": "牙齒"
+      },
+      {
+        "kanji": "声",
+        "reading": "こえ",
+        "part": "單字",
+        "meaning": "聲音"
+      },
+      {
+        "kanji": "手",
+        "reading": "て",
+        "part": "單字",
+        "meaning": "手"
+      },
+      {
+        "kanji": "足",
+        "reading": "あし",
+        "part": "單字",
+        "meaning": "腳"
+      },
+      {
+        "kanji": "お腹",
+        "reading": "おなか",
+        "part": "單字",
+        "meaning": "肚子"
+      }
+    ]
+  },
+  {
+    "id": "1780130478773",
+    "name": "職稱、身份",
+    "words": [
+      {
+        "kanji": "先生",
+        "reading": "せんせい",
+        "part": "單字",
+        "meaning": "老師"
+      },
+      {
+        "kanji": "教師",
+        "reading": "きょうし",
+        "part": "單字",
+        "meaning": "教師、老師"
+      },
+      {
+        "kanji": "学生",
+        "reading": "がくせい",
+        "part": "單字",
+        "meaning": "學生"
+      },
+      {
+        "kanji": "生徒",
+        "reading": "せいと",
+        "part": "單字",
+        "meaning": "學生"
+      },
+      {
+        "kanji": "校長",
+        "reading": "こうちょう",
+        "part": "單字",
+        "meaning": "校長（高中以下）"
+      },
+      {
+        "kanji": "学長",
+        "reading": "がくちょう",
+        "part": "單字",
+        "meaning": "校長（大學校長）"
+      },
+      {
+        "kanji": "先輩",
+        "reading": "せんぱい",
+        "part": "單字",
+        "meaning": "前輩、學長、學姊"
+      },
+      {
+        "kanji": "後輩",
+        "reading": "こうはい",
+        "part": "單字",
+        "meaning": "晚輩、學弟、學妹"
+      },
+      {
+        "kanji": "友達",
+        "reading": "ともだち",
+        "part": "單字",
+        "meaning": "朋友"
+      },
+      {
+        "kanji": "親友",
+        "reading": "しんゆう",
+        "part": "單字",
+        "meaning": "好友、摯友、死黨"
+      },
+      {
+        "kanji": "警察",
+        "reading": "けいさつ",
+        "part": "單字",
+        "meaning": "警察"
+      },
+      {
+        "kanji": "警官",
+        "reading": "けいかん",
+        "part": "單字",
+        "meaning": "警察"
+      },
+      {
+        "kanji": "お巡りさん",
+        "reading": "おまわりさん",
+        "part": "單字",
+        "meaning": "警察、巡警"
+      },
+      {
+        "kanji": "留学生",
+        "reading": "りゅうがくせい",
+        "part": "單字",
+        "meaning": "留學生"
+      },
+      {
+        "kanji": "会社員",
+        "reading": "かいしゃいん",
+        "part": "單字",
+        "meaning": "公司職員"
+      },
+      {
+        "kanji": "公務員",
+        "reading": "こうむいん",
+        "part": "單字",
+        "meaning": "公務員"
+      },
+      {
+        "kanji": "サラリーマン",
+        "reading": "salaryman",
+        "part": "單字",
+        "meaning": "上班族"
+      }
     ]
   }
 ]
