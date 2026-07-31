@@ -3,7 +3,7 @@ import LiquidGlass from "liquid-glass-react";
 import { Settings, FileText, CheckCircle2, X, BookOpen, FolderPlus } from "lucide-react";
 import type { Word, Collection } from "./data/words";
 import { getAverageColor } from "./utils/color";
-import { collectWords, weightedSample, applyOutcome } from "./utils/quiz";
+import { collectWords, weightedSample, applyOutcome, wordKey } from "./utils/quiz";
 import Library from "./components/Library";
 
 type Screen = "start" | "quiz" | "result";
@@ -298,7 +298,7 @@ export default function App() {
       setTimeout(() => setIsShaking(false), 300);
       if (newLives <= 0) {
         setMistakes((p) =>
-          p.some((w) => w.kanji === currentWord.kanji)
+          p.some((w) => wordKey(w) === wordKey(currentWord))
             ? p
             : [...p, currentWord],
         );
@@ -321,7 +321,7 @@ export default function App() {
   const handleSkip = useCallback(() => {
     const currentWord = sessionWords[currentIndex];
     setMistakes((p) =>
-      p.some((w) => w.kanji === currentWord.kanji) ? p : [...p, currentWord],
+      p.some((w) => wordKey(w) === wordKey(currentWord)) ? p : [...p, currentWord],
     );
     updateCollections(applyOutcome(customWordBank, currentWord, "wrong"));
     nextQuestion(currentIndex, sessionWords);
