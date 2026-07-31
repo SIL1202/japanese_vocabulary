@@ -7,7 +7,8 @@
     "dev": "concurrently \"npm run server\" \"vite\"",
     "server": "node server.js",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run"
   },
   "dependencies": {
     "liquid-glass-react": "^1.1.1",
@@ -29,6 +30,7 @@
     "postcss": "^8.5.1",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.7.3",
-    "vite": "^6.0.7"
+    "vite": "^6.0.7",
+    "vitest": "^4.1.10"
   }
 }
