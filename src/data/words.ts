@@ -3,6 +3,8 @@ export interface Word {
   reading: string;
   part: string;
   meaning: string;
+  attempts?: number;
+  difficulty?: number;
 }
 
 export interface Collection {
