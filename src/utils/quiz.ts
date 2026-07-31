@@ -40,3 +40,23 @@ export function weightedSample(
   }
   return result;
 }
+
+export function applyOutcome(
+  collections: Collection[],
+  target: Word,
+  outcome: "correct" | "wrong",
+): Collection[] {
+  const key = wordKey(target);
+  return collections.map((c) => ({
+    ...c,
+    words: c.words.map((w) =>
+      wordKey(w) === key
+        ? {
+            ...w,
+            attempts: (w.attempts ?? 0) + 1,
+            difficulty: nextDifficulty(w.difficulty ?? 0, outcome),
+          }
+        : w,
+    ),
+  }));
+}
