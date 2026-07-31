@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { nextDifficulty, collectWords, weightedSample } from "./quiz";
+import { nextDifficulty, collectWords, weightedSample, applyOutcome } from "./quiz";
 import type { Collection, Word } from "../data/words";
 
 describe("nextDifficulty", () => {
@@ -61,6 +61,31 @@ describe("weightedSample", () => {
     }
     expect(highFirst).toBeGreaterThan(800);
     expect(highFirst).toBeLessThan(1200);
+  });
+});
+
+describe("applyOutcome", () => {
+  const cols: Collection[] = [
+    { id: "a", name: "A", words: [w("犬", 0), w("猫", 3)] },
+  ];
+  it("答錯：attempts+1、difficulty+2", () => {
+    const out = applyOutcome(cols, cols[0].words[0], "wrong");
+    expect(out[0].words[0].attempts).toBe(1);
+    expect(out[0].words[0].difficulty).toBe(2);
+  });
+  it("答對：attempts+1、difficulty-1 不低於 0", () => {
+    const out = applyOutcome(cols, cols[0].words[1], "correct");
+    expect(out[0].words[1].attempts).toBe(1);
+    expect(out[0].words[1].difficulty).toBe(2);
+  });
+  it("不更動其他字", () => {
+    const out = applyOutcome(cols, cols[0].words[0], "wrong");
+    expect(out[0].words[1].difficulty).toBe(3);
+  });
+  it("回傳新物件（不 mutate 原資料）", () => {
+    const out = applyOutcome(cols, cols[0].words[0], "wrong");
+    expect(cols[0].words[0].attempts).toBeUndefined();
+    expect(out).not.toBe(cols);
   });
 });
 
