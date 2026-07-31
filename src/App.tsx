@@ -482,7 +482,7 @@ export default function App() {
             }}
           >
             <div
-              className={`w-80 min-h-[460px] flex flex-col justify-center transition-transform duration-300 ${isShaking ? "animate-shake" : ""}`}
+              className={`w-80 h-[460px] overflow-y-auto flex flex-col justify-center transition-transform duration-300 ${isShaking ? "animate-shake" : ""}`}
               style={{
                 borderRadius: `${cornerRadius}px`,
                 padding: "2.5rem",
@@ -495,15 +495,16 @@ export default function App() {
                     日文練習機
                   </h3>
                   <div className="text-xs text-amber-400 mb-4 flex items-center gap-1">
-                    <CheckCircle2 size={12} /> 當前題庫：{customWordBank.length}{" "}
+                    <CheckCircle2 size={12} /> 當前題庫：
+                    {customWordBank.reduce((sum, c) => sum + c.words.length, 0)}{" "}
                     個單字
                   </div>
                   {customWordBank.length > 0 && (
-                    <div className="mb-5">
+                    <div className="mb-4">
                       <p className="text-xs text-white/50 mb-2">
                         選擇資料夾：
                       </p>
-                      <div className="flex flex-wrap gap-2 mb-4">
+                      <div className="flex flex-wrap gap-2 mb-3 max-h-[76px] overflow-y-auto pr-1">
                         {customWordBank.map((c) => {
                           const active = selectedFolderIds.includes(c.id);
                           return (
