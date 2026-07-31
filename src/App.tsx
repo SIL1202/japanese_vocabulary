@@ -498,6 +498,55 @@ export default function App() {
                     <CheckCircle2 size={12} /> 當前題庫：{customWordBank.length}{" "}
                     個單字
                   </div>
+                  {customWordBank.length > 0 && (
+                    <div className="mb-5">
+                      <p className="text-xs text-white/50 mb-2">
+                        選擇資料夾：
+                      </p>
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {customWordBank.map((c) => {
+                          const active = selectedFolderIds.includes(c.id);
+                          return (
+                            <button
+                              key={c.id}
+                              onClick={() =>
+                                setSelectedFolderIds((prev) =>
+                                  prev.includes(c.id)
+                                    ? prev.filter((id) => id !== c.id)
+                                    : [...prev, c.id],
+                                )
+                              }
+                              className={`text-xs px-3 py-1.5 rounded-full border transition-all active:scale-95 ${
+                                active
+                                  ? "bg-white/10 border-amber-400/60 text-white shadow-[0_0_10px_rgba(251,191,36,0.2)]"
+                                  : "bg-white/5 border-white/10 text-white/50 hover:bg-white/10"
+                              }`}
+                            >
+                              {c.name}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <div className="flex gap-2 bg-white/5 border border-white/10 rounded-2xl p-1">
+                        {[
+                          { key: true, label: "弱點優先" },
+                          { key: false, label: "純隨機" },
+                        ].map((m) => (
+                          <button
+                            key={m.label}
+                            onClick={() => setWeightedMode(m.key)}
+                            className={`flex-1 text-xs px-3 py-2 rounded-xl transition-all active:scale-95 ${
+                              weightedMode === m.key
+                                ? "bg-white/10 border border-amber-400/60 text-white shadow-[0_0_10px_rgba(251,191,36,0.2)]"
+                                : "text-white/50 hover:text-white"
+                            }`}
+                          >
+                            {m.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                   <p className="text-sm text-white/70 mb-6">
                     選擇您想要練習的題數：
                   </p>
