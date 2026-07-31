@@ -366,19 +366,20 @@ import { collectWords, weightedSample, applyOutcome } from "./utils/quiz";
 const [selectedFolderIds, setSelectedFolderIds] = useState<string[]>([]);
 const [weightedMode, setWeightedMode] = useState(true);
 ```
-並在載入資料的兩個位置，把「已載入的 collection id」設為預設全選。做法：新增一個 helper 並在 `setCustomWordBank(data)` 後呼叫。修改 `loadCollections` 內兩處成功載入分支：
+
+- [ ] **Step 2b: 加一個 effect 讓資料夾選取與題庫同步（放在 state 定義之後、任一現有 useEffect 附近）**
+
+不要把 `setSelectedFolderIds` 塞進 `updateCollections`（那會在每次答題更新統計時誤重設選取）。改用一個「對帳」effect：保留使用者仍有效的選取、丟掉已刪除的資料夾、選取為空時（含初次載入）預設全選。
 ```ts
-setCustomWordBank(data);
-setSelectedFolderIds(data.map((c: Collection) => c.id));
+useEffect(() => {
+  setSelectedFolderIds((prev) => {
+    const ids = customWordBank.map((c) => c.id);
+    const kept = prev.filter((id) => ids.includes(id));
+    return kept.length > 0 ? kept : ids;
+  });
+}, [customWordBank]);
 ```
-以及 localStorage fallback 的 `setCustomWordBank(parsed)` 後：
-```ts
-setSelectedFolderIds(parsed.map((c: Collection) => c.id));
-```
-同時在 `updateCollections`（`src/App.tsx:85`）末尾同步預設全選（避免新增/刪除資料夾後選取失準）：
-```ts
-setSelectedFolderIds(newCollections.map((c) => c.id));
-```
+如此：初次載入 `prev=[]` → 全選；新增資料夾後保留原選取（新資料夾預設不選，符合「只練我選的」直覺，如需預設全選可改為 `ids`）；刪除資料夾後自動移除；答題更新統計時 `ids` 不變、`kept===prev`，不會動到選取。
 
 - [ ] **Step 3: 改寫 `beginSession`（取代 `src/App.tsx:229-237`）**
 
