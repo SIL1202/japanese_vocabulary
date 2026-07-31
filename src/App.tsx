@@ -3,6 +3,7 @@ import LiquidGlass from "liquid-glass-react";
 import { Settings, FileText, CheckCircle2, X, BookOpen, FolderPlus } from "lucide-react";
 import type { Word, Collection } from "./data/words";
 import { getAverageColor } from "./utils/color";
+import { collectWords, weightedSample, applyOutcome } from "./utils/quiz";
 import Library from "./components/Library";
 
 type Screen = "start" | "quiz" | "result";
@@ -56,6 +57,8 @@ export default function App() {
   const [feedback, setFeedback] = useState({ text: "", type: "" });
   const [isShaking, setIsShaking] = useState(false);
   const [inputDisabled, setInputDisabled] = useState(false);
+  const [selectedFolderIds, setSelectedFolderIds] = useState<string[]>([]);
+  const [weightedMode, setWeightedMode] = useState(true);
 
   // --- Import Raw Text State (新功能) ---
   const [rawText, setRawText] = useState("");
@@ -119,6 +122,16 @@ export default function App() {
     };
     loadCollections();
   }, []);
+
+  // 對帳：保留使用者仍有效的資料夾選取、丟掉已刪除的資料夾，
+  // 選取為空時（含初次載入）預設全選。
+  useEffect(() => {
+    setSelectedFolderIds((prev) => {
+      const ids = customWordBank.map((c) => c.id);
+      const kept = prev.filter((id) => ids.includes(id));
+      return kept.length > 0 ? kept : ids;
+    });
+  }, [customWordBank]);
 
   useEffect(() => {
     if (screen === "quiz") setTimeout(() => inputRef.current?.focus(), 100);
@@ -227,13 +240,13 @@ export default function App() {
   }, []);
 
   const beginSession = (count: number | "all") => {
-    const allWords = customWordBank.flatMap((c) => c.words);
-    if (allWords.length === 0) {
+    const pool = collectWords(customWordBank, selectedFolderIds);
+    if (pool.length === 0) {
       alert("目前題庫空空如也！請先開啟右上角設定，貼入時雨之町的單字。");
       return;
     }
-    const shuffled = [...allWords].sort(() => Math.random() - 0.5);
-    startSession(count === "all" ? shuffled : shuffled.slice(0, count));
+    const n = count === "all" ? pool.length : count;
+    startSession(weightedSample(pool, n, weightedMode));
   };
 
   const startReview = () => {
@@ -274,6 +287,7 @@ export default function App() {
 
     if (userValue === currentWord.reading) {
       setCorrectCount((prev) => prev + 1);
+      updateCollections(applyOutcome(customWordBank, currentWord, "correct"));
       setFeedback({ text: "正解です！太棒了！", type: "text-emerald-400" });
       setInputDisabled(true);
       setTimeout(() => nextQuestion(currentIndex, sessionWords), 1200);
@@ -288,6 +302,7 @@ export default function App() {
             ? p
             : [...p, currentWord],
         );
+        updateCollections(applyOutcome(customWordBank, currentWord, "wrong"));
         setFeedback({
           text: `機會用盡！正解是：【${currentWord.reading}】`,
           type: "text-rose-400",
@@ -308,8 +323,9 @@ export default function App() {
     setMistakes((p) =>
       p.some((w) => w.kanji === currentWord.kanji) ? p : [...p, currentWord],
     );
+    updateCollections(applyOutcome(customWordBank, currentWord, "wrong"));
     nextQuestion(currentIndex, sessionWords);
-  }, [currentIndex, nextQuestion, sessionWords]);
+  }, [currentIndex, nextQuestion, sessionWords, customWordBank]);
 
   const handleClearAll = () => {
     if (confirm("確定要清空所有題庫嗎？")) {
