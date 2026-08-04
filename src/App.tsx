@@ -1,9 +1,21 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import LiquidGlass from "liquid-glass-react";
-import { Settings, FileText, CheckCircle2, X, BookOpen, FolderPlus } from "lucide-react";
+import {
+  Settings,
+  FileText,
+  CheckCircle2,
+  X,
+  BookOpen,
+  FolderPlus,
+} from "lucide-react";
 import type { Word, Collection } from "./data/words";
 import { getAverageColor } from "./utils/color";
-import { collectWords, weightedSample, applyOutcome, wordKey } from "./utils/quiz";
+import {
+  collectWords,
+  weightedSample,
+  applyOutcome,
+  wordKey,
+} from "./utils/quiz";
 import Library from "./components/Library";
 
 type Screen = "start" | "quiz" | "result";
@@ -108,8 +120,14 @@ export default function App() {
         if (saved) {
           try {
             const parsed = JSON.parse(saved);
-            if (Array.isArray(parsed) && parsed.length > 0 && !("words" in parsed[0])) {
-              const migrated: Collection[] = [{ id: Date.now().toString(), name: "預設題庫", words: parsed }];
+            if (
+              Array.isArray(parsed) &&
+              parsed.length > 0 &&
+              !("words" in parsed[0])
+            ) {
+              const migrated: Collection[] = [
+                { id: Date.now().toString(), name: "預設題庫", words: parsed },
+              ];
               updateCollections(migrated);
             } else {
               setCustomWordBank(parsed);
@@ -160,16 +178,11 @@ export default function App() {
       // 標準時雨複製格式一般會有 4 個主要欄位：漢字/語彙、讀音、詞性、中文
       if (tokens.length >= 3) {
         // 移除 tokens 中的重音標記，例如 [0], [3][2]
-        const cleanTokens = tokens.filter(t => !/^\[\d+\]+$/.test(t));
-        
+        const cleanTokens = tokens.filter((t) => !/^\[\d+\]+$/.test(t));
+
         // 有些單字可能漢字和讀音相同（例如外來語），複製出來只有3欄
-        const hasPart = cleanTokens.some(
-          (t) =>
-            t.includes("名") ||
-            t.includes("動") ||
-            t.includes("形") ||
-            t.includes("副"),
-        );
+        const partOfSpeechTags = ["名", "動", "形", "副"];
+        const hasPart = cleanTokens.some((t) => partOfSpeechTags.includes(t));
 
         let kanji = cleanTokens[0];
         let reading = cleanTokens[1];
@@ -275,17 +288,38 @@ export default function App() {
       .replace(/[\u200B-\u200D\uFEFF]/g, "");
     if (userValue === "") return;
 
-    // Hiragana check
-    const hasJapanese = /[\u3040-\u309F\u30FC]/.test(userValue);
-    if (!hasJapanese) {
-      setFeedback({
-        text: "💡 提示：請使用「平假名」讀音輸入喔！",
-        type: "text-amber-400",
-      });
-      return;
+    // 依「正確答案」本身的形式，決定這題要驗證平假名還是英文
+    // （而不是用使用者打了什麼來猜，這樣才不會誤判）
+    const isEnglishAnswer = /^[a-zA-Z\s'-]+$/.test(currentWord.reading);
+
+    if (isEnglishAnswer) {
+      // 外來語題目：只允許英文字母、空白、撇號、連字號
+      const isValidEnglish = /^[a-zA-Z\s'-]+$/.test(userValue);
+      if (!isValidEnglish) {
+        setFeedback({
+          text: "💡 提示：這是外來語，請輸入「英文」原文喔！",
+          type: "text-amber-400",
+        });
+        return;
+      }
+    } else {
+      // 一般單字：維持平假名檢查
+      const hasJapanese = /[\u3040-\u309F\u30FC]/.test(userValue);
+      if (!hasJapanese) {
+        setFeedback({
+          text: "💡 提示：請使用「平假名」讀音輸入喔！",
+          type: "text-amber-400",
+        });
+        return;
+      }
     }
 
-    if (userValue === currentWord.reading) {
+    // 英文答案採不分大小寫比對，平假名答案維持原本精確比對
+    const isCorrect = isEnglishAnswer
+      ? userValue.toLowerCase() === currentWord.reading.toLowerCase()
+      : userValue === currentWord.reading;
+
+    if (isCorrect) {
       setCorrectCount((prev) => prev + 1);
       updateCollections(applyOutcome(customWordBank, currentWord, "correct"));
       setFeedback({ text: "正解です！太棒了！", type: "text-emerald-400" });
@@ -321,7 +355,9 @@ export default function App() {
   const handleSkip = useCallback(() => {
     const currentWord = sessionWords[currentIndex];
     setMistakes((p) =>
-      p.some((w) => wordKey(w) === wordKey(currentWord)) ? p : [...p, currentWord],
+      p.some((w) => wordKey(w) === wordKey(currentWord))
+        ? p
+        : [...p, currentWord],
     );
     updateCollections(applyOutcome(customWordBank, currentWord, "wrong"));
     nextQuestion(currentIndex, sessionWords);
@@ -395,7 +431,16 @@ export default function App() {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [screen, focusedBtn, mistakes, customWordBank, currentIndex, handleSkip]);
+  }, [
+    screen,
+    focusedBtn,
+    mistakes,
+    customWordBank,
+    currentIndex,
+    handleSkip,
+    selectedFolderIds,
+    weightedMode,
+  ]);
 
   const accuracy =
     sessionWords.length > 0
@@ -496,14 +541,15 @@ export default function App() {
                   </h3>
                   <div className="text-xs text-amber-400 mb-4 flex items-center gap-1">
                     <CheckCircle2 size={12} /> 當前題庫：
-                    {customWordBank.reduce((sum, c) => sum + c.words.length, 0)}{" "}
+                    {customWordBank.reduce(
+                      (sum, c) => sum + c.words.length,
+                      0,
+                    )}{" "}
                     個單字
                   </div>
                   {customWordBank.length > 0 && (
                     <div className="mb-4">
-                      <p className="text-xs text-white/50 mb-2">
-                        選擇資料夾：
-                      </p>
+                      <p className="text-xs text-white/50 mb-2">選擇資料夾：</p>
                       <div className="flex flex-wrap gap-2 mb-3 max-h-[76px] overflow-y-auto pr-1">
                         {customWordBank.map((c) => {
                           const active = selectedFolderIds.includes(c.id);
@@ -609,7 +655,13 @@ export default function App() {
                     disabled={inputDisabled}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleInputSubmit}
-                    placeholder="輸入平假名讀音..."
+                    placeholder={
+                      /^[a-zA-Z\s'-]+$/.test(
+                        sessionWords[currentIndex]?.reading || "",
+                      )
+                        ? "輸入英文原文..."
+                        : "輸入平假名讀音..."
+                    }
                     className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 text-xl text-center text-white placeholder-white/30 focus:outline-none focus:border-amber-400/40 transition-all shadow-inner"
                   />
                   <div
