@@ -13,7 +13,9 @@
         "kanji": "両親",
         "reading": "りょうしん",
         "part": "單字",
-        "meaning": "父母"
+        "meaning": "父母",
+        "attempts": 1,
+        "difficulty": 0
       },
       {
         "kanji": "祖父",
@@ -73,7 +75,9 @@
         "kanji": "姉妹",
         "reading": "しまい",
         "part": "單字",
-        "meaning": "姊妹"
+        "meaning": "姊妹",
+        "attempts": 1,
+        "difficulty": 2
       },
       {
         "kanji": "兄",
@@ -85,7 +89,9 @@
         "kanji": "姉",
         "reading": "あね",
         "part": "單字",
-        "meaning": "姊姊"
+        "meaning": "姊姊",
+        "attempts": 2,
+        "difficulty": 0
       },
       {
         "kanji": "弟",
@@ -109,7 +115,9 @@
         "kanji": "娘",
         "reading": "むすめ",
         "part": "單字",
-        "meaning": "女兒"
+        "meaning": "女兒",
+        "attempts": 1,
+        "difficulty": 0
       },
       {
         "kanji": "孫",
@@ -121,7 +129,9 @@
         "kanji": "従兄弟",
         "reading": "いとこ",
         "part": "單字",
-        "meaning": "堂表兄弟姊妹"
+        "meaning": "堂表兄弟姊妹",
+        "attempts": 1,
+        "difficulty": 2
       },
       {
         "kanji": "甥",
@@ -151,7 +161,9 @@
         "kanji": "花婿",
         "reading": "はなむこ",
         "part": "單字",
-        "meaning": "新郎"
+        "meaning": "新郎",
+        "attempts": 1,
+        "difficulty": 2
       },
       {
         "kanji": "花嫁",
@@ -163,7 +175,9 @@
         "kanji": "ご家族",
         "reading": "ごかぞく",
         "part": "單字",
-        "meaning": "對方家人"
+        "meaning": "對方家人",
+        "attempts": 1,
+        "difficulty": 2
       },
       {
         "kanji": "ご両親",
@@ -229,7 +243,9 @@
         "kanji": "ご姉妹",
         "reading": "ごしまい",
         "part": "單字",
-        "meaning": "姊妹"
+        "meaning": "姊妹",
+        "attempts": 1,
+        "difficulty": 2
       },
       {
         "kanji": "お兄さん",
@@ -283,43 +299,57 @@
         "kanji": "体",
         "reading": "からだ",
         "part": "單字",
-        "meaning": "身體"
+        "meaning": "身體",
+        "attempts": 3,
+        "difficulty": 2
       },
       {
         "kanji": "頭",
         "reading": "あたま",
         "part": "[3][2]",
-        "meaning": "頭／頭腦"
+        "meaning": "頭／頭腦",
+        "attempts": 3,
+        "difficulty": 4
       },
       {
         "kanji": "髪",
         "reading": "かみ",
         "part": "單字",
-        "meaning": "頭髮"
+        "meaning": "頭髮",
+        "attempts": 4,
+        "difficulty": 2
       },
       {
         "kanji": "顔",
         "reading": "かお",
         "part": "單字",
-        "meaning": "臉、顏面"
+        "meaning": "臉、顏面",
+        "attempts": 2,
+        "difficulty": 0
       },
       {
         "kanji": "目",
         "reading": "め",
         "part": "單字",
-        "meaning": "眼睛"
+        "meaning": "眼睛",
+        "attempts": 3,
+        "difficulty": 0
       },
       {
         "kanji": "耳",
         "reading": "みみ",
         "part": "單字",
-        "meaning": "耳朵"
+        "meaning": "耳朵",
+        "attempts": 2,
+        "difficulty": 2
       },
       {
         "kanji": "鼻",
         "reading": "はな",
         "part": "單字",
-        "meaning": "鼻子"
+        "meaning": "鼻子",
+        "attempts": 3,
+        "difficulty": 0
       },
       {
         "kanji": "喉",
@@ -331,37 +361,49 @@
         "kanji": "口",
         "reading": "くち",
         "part": "單字",
-        "meaning": "嘴巴"
+        "meaning": "嘴巴",
+        "attempts": 3,
+        "difficulty": 2
       },
       {
         "kanji": "歯",
         "reading": "は",
         "part": "單字",
-        "meaning": "牙齒"
+        "meaning": "牙齒",
+        "attempts": 1,
+        "difficulty": 0
       },
       {
         "kanji": "声",
         "reading": "こえ",
         "part": "單字",
-        "meaning": "聲音"
+        "meaning": "聲音",
+        "attempts": 3,
+        "difficulty": 0
       },
       {
         "kanji": "手",
         "reading": "て",
         "part": "單字",
-        "meaning": "手"
+        "meaning": "手",
+        "attempts": 1,
+        "difficulty": 0
       },
       {
         "kanji": "足",
         "reading": "あし",
         "part": "單字",
-        "meaning": "腳"
+        "meaning": "腳",
+        "attempts": 1,
+        "difficulty": 0
       },
       {
         "kanji": "お腹",
         "reading": "おなか",
         "part": "單字",
-        "meaning": "肚子"
+        "meaning": "肚子",
+        "attempts": 2,
+        "difficulty": 0
       }
     ]
   },
@@ -379,7 +421,9 @@
         "kanji": "教師",
         "reading": "きょうし",
         "part": "單字",
-        "meaning": "教師、老師"
+        "meaning": "教師、老師",
+        "attempts": 1,
+        "difficulty": 2
       },
       {
         "kanji": "学生",
@@ -421,31 +465,41 @@
         "kanji": "友達",
         "reading": "ともだち",
         "part": "單字",
-        "meaning": "朋友"
+        "meaning": "朋友",
+        "attempts": 1,
+        "difficulty": 2
       },
       {
         "kanji": "親友",
         "reading": "しんゆう",
         "part": "單字",
-        "meaning": "好友、摯友、死黨"
+        "meaning": "好友、摯友、死黨",
+        "attempts": 1,
+        "difficulty": 2
       },
       {
         "kanji": "警察",
         "reading": "けいさつ",
         "part": "單字",
-        "meaning": "警察"
+        "meaning": "警察",
+        "attempts": 1,
+        "difficulty": 2
       },
       {
         "kanji": "警官",
         "reading": "けいかん",
         "part": "單字",
-        "meaning": "警察"
+        "meaning": "警察",
+        "attempts": 1,
+        "difficulty": 2
       },
       {
         "kanji": "お巡りさん",
         "reading": "おまわりさん",
         "part": "單字",
-        "meaning": "警察、巡警"
+        "meaning": "警察、巡警",
+        "attempts": 1,
+        "difficulty": 2
       },
       {
         "kanji": "留学生",
@@ -470,6 +524,382 @@
         "reading": "salaryman",
         "part": "單字",
         "meaning": "上班族"
+      }
+    ]
+  },
+  {
+    "id": "1785483958564",
+    "name": "場所",
+    "words": [
+      {
+        "kanji": "場所",
+        "reading": "ばしょ",
+        "part": "單字",
+        "meaning": "場所",
+        "attempts": 1,
+        "difficulty": 2
+      },
+      {
+        "kanji": "所",
+        "reading": "ところ",
+        "part": "單字",
+        "meaning": "地點、地方",
+        "attempts": 3,
+        "difficulty": 0
+      },
+      {
+        "kanji": "角",
+        "reading": "かど",
+        "part": "單字",
+        "meaning": "轉角",
+        "attempts": 1,
+        "difficulty": 0
+      },
+      {
+        "kanji": "橋",
+        "reading": "はし",
+        "part": "單字",
+        "meaning": "橋",
+        "attempts": 2,
+        "difficulty": 4
+      },
+      {
+        "kanji": "店",
+        "reading": "みせ",
+        "part": "單字",
+        "meaning": "店"
+      },
+      {
+        "kanji": "村",
+        "reading": "むら",
+        "part": "單字",
+        "meaning": "村子、村莊"
+      },
+      {
+        "kanji": "国",
+        "reading": "くに",
+        "part": "單字",
+        "meaning": "國家",
+        "attempts": 1,
+        "difficulty": 2
+      },
+      {
+        "kanji": "町",
+        "reading": "まち",
+        "part": "單字",
+        "meaning": "城鎮、街道",
+        "attempts": 1,
+        "difficulty": 0
+      },
+      {
+        "kanji": "道",
+        "reading": "みち",
+        "part": "單字",
+        "meaning": "道路",
+        "attempts": 1,
+        "difficulty": 0
+      },
+      {
+        "kanji": "庭",
+        "reading": "にわ",
+        "part": "單字",
+        "meaning": "庭院"
+      },
+      {
+        "kanji": "池",
+        "reading": "いけ",
+        "part": "單字",
+        "meaning": "池塘",
+        "attempts": 1,
+        "difficulty": 0
+      },
+      {
+        "kanji": "家",
+        "reading": "いえ",
+        "part": "單字",
+        "meaning": "家"
+      },
+      {
+        "kanji": "家",
+        "reading": "うち",
+        "part": "[0][2]",
+        "meaning": "家",
+        "attempts": 5,
+        "difficulty": 5
+      },
+      {
+        "kanji": "玄関",
+        "reading": "げんかん",
+        "part": "單字",
+        "meaning": "玄關",
+        "attempts": 6,
+        "difficulty": 9
+      },
+      {
+        "kanji": "部屋",
+        "reading": "へや",
+        "part": "單字",
+        "meaning": "房間"
+      },
+      {
+        "kanji": "廊下",
+        "reading": "ろうか",
+        "part": "單字",
+        "meaning": "走廊"
+      },
+      {
+        "kanji": "階段",
+        "reading": "かいだん",
+        "part": "單字",
+        "meaning": "樓梯"
+      },
+      {
+        "kanji": "台所",
+        "reading": "だいどころ",
+        "part": "單字",
+        "meaning": "廚房",
+        "attempts": 3,
+        "difficulty": 3
+      },
+      {
+        "kanji": "外国",
+        "reading": "がいこく",
+        "part": "單字",
+        "meaning": "國外",
+        "attempts": 1,
+        "difficulty": 0
+      },
+      {
+        "kanji": "建物",
+        "reading": "たてもの",
+        "part": "[2][3]",
+        "meaning": "建築物",
+        "attempts": 8,
+        "difficulty": 7
+      },
+      {
+        "kanji": "食堂",
+        "reading": "しょくどう",
+        "part": "單字",
+        "meaning": "餐廳（餐館或飯館）"
+      },
+      {
+        "kanji": "会社",
+        "reading": "かいしゃ",
+        "part": "單字",
+        "meaning": "公司",
+        "attempts": 9,
+        "difficulty": 6
+      },
+      {
+        "kanji": "銀行",
+        "reading": "ぎんこう",
+        "part": "單字",
+        "meaning": "銀行",
+        "attempts": 1,
+        "difficulty": 0
+      },
+      {
+        "kanji": "交番",
+        "reading": "こうばん",
+        "part": "單字",
+        "meaning": "派出所",
+        "attempts": 6,
+        "difficulty": 6
+      },
+      {
+        "kanji": "公園",
+        "reading": "こうえん",
+        "part": "單字",
+        "meaning": "公園",
+        "attempts": 9,
+        "difficulty": 9
+      },
+      {
+        "kanji": "病院",
+        "reading": "びょういん",
+        "part": "單字",
+        "meaning": "醫院"
+      },
+      {
+        "kanji": "学校",
+        "reading": "がっこう",
+        "part": "單字",
+        "meaning": "學校"
+      },
+      {
+        "kanji": "教室",
+        "reading": "きょうしつ",
+        "part": "單字",
+        "meaning": "教室"
+      },
+      {
+        "kanji": "職員室",
+        "reading": "しょくいんしつ",
+        "part": "單字",
+        "meaning": "教職員室",
+        "attempts": 2,
+        "difficulty": 4
+      },
+      {
+        "kanji": "バス停",
+        "reading": "ばすてい",
+        "part": "單字",
+        "meaning": "公車站",
+        "attempts": 6,
+        "difficulty": 9
+      },
+      {
+        "kanji": "喫茶店",
+        "reading": "きっさてん",
+        "part": "[0][3]",
+        "meaning": "咖啡廳、茶館",
+        "attempts": 4,
+        "difficulty": 5
+      },
+      {
+        "kanji": "郵便局",
+        "reading": "ゆうびんきょく",
+        "part": "單字",
+        "meaning": "郵局",
+        "attempts": 1,
+        "difficulty": 0
+      },
+      {
+        "kanji": "大使館",
+        "reading": "たいしかん",
+        "part": "單字",
+        "meaning": "大使館"
+      },
+      {
+        "kanji": "図書館",
+        "reading": "としょかん",
+        "part": "單字",
+        "meaning": "圖書館"
+      },
+      {
+        "kanji": "八百屋",
+        "reading": "やおや",
+        "part": "單字",
+        "meaning": "蔬菜店",
+        "attempts": 3,
+        "difficulty": 0
+      },
+      {
+        "kanji": "映画館",
+        "reading": "えいがかん",
+        "part": "單字",
+        "meaning": "電影院"
+      },
+      {
+        "kanji": "お手洗い",
+        "reading": "おてあらい",
+        "part": "單字",
+        "meaning": "洗手間",
+        "attempts": 2,
+        "difficulty": 1
+      },
+      {
+        "kanji": "お風呂",
+        "reading": "おふろ",
+        "part": "單字",
+        "meaning": "浴室／澡堂",
+        "attempts": 3,
+        "difficulty": 0
+      },
+      {
+        "kanji": "交差点",
+        "reading": "こうさてん",
+        "part": "單字",
+        "meaning": "交叉路口",
+        "attempts": 10,
+        "difficulty": 14
+      },
+      {
+        "kanji": "入り口",
+        "reading": "いりぐち",
+        "part": "單字",
+        "meaning": "入口",
+        "attempts": 5,
+        "difficulty": 4
+      },
+      {
+        "kanji": "出口",
+        "reading": "でぐち",
+        "part": "單字",
+        "meaning": "出口"
+      },
+      {
+        "kanji": "アパート",
+        "reading": "apartment",
+        "part": "單字",
+        "meaning": "公寓"
+      },
+      {
+        "kanji": "デパート",
+        "reading": "department",
+        "part": "單字",
+        "meaning": "百貨公司",
+        "attempts": 3,
+        "difficulty": 6
+      },
+      {
+        "kanji": "エレベーター",
+        "reading": "elevator",
+        "part": "單字",
+        "meaning": "電梯",
+        "attempts": 23,
+        "difficulty": 40
+      },
+      {
+        "kanji": "レストラン",
+        "reading": "restaurant",
+        "part": "單字",
+        "meaning": "餐廳（西餐廳）"
+      },
+      {
+        "kanji": "カフェ",
+        "reading": "café〔法〕",
+        "part": "單字",
+        "meaning": "咖啡廳",
+        "attempts": 1,
+        "difficulty": 2
+      },
+      {
+        "kanji": "プール",
+        "reading": "pool",
+        "part": "單字",
+        "meaning": "游泳池",
+        "attempts": 1,
+        "difficulty": 0
+      },
+      {
+        "kanji": "ホテル",
+        "reading": "hotel",
+        "part": "單字",
+        "meaning": "旅館、飯店"
+      },
+      {
+        "kanji": "トイレ",
+        "reading": "toilet",
+        "part": "單字",
+        "meaning": "廁所",
+        "attempts": 1,
+        "difficulty": 2
+      },
+      {
+        "kanji": "カフェ",
+        "reading": "飲食店営業許可",
+        "part": "可提供酒",
+        "meaning": "可提供餐點",
+        "attempts": 5,
+        "difficulty": 10
+      },
+      {
+        "kanji": "喫茶店",
+        "reading": "喫茶店営業許可",
+        "part": "不可提供酒",
+        "meaning": "只能提供餅乾等"
       }
     ]
   }
