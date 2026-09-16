@@ -76,8 +76,8 @@
         "reading": "しまい",
         "part": "單字",
         "meaning": "姊妹",
-        "attempts": 1,
-        "difficulty": 2
+        "attempts": 3,
+        "difficulty": 3
       },
       {
         "kanji": "兄",
@@ -103,7 +103,9 @@
         "kanji": "妹",
         "reading": "いもうと",
         "part": "單字",
-        "meaning": "妹妹"
+        "meaning": "妹妹",
+        "attempts": 2,
+        "difficulty": 1
       },
       {
         "kanji": "息子",
@@ -130,14 +132,16 @@
         "reading": "いとこ",
         "part": "單字",
         "meaning": "堂表兄弟姊妹",
-        "attempts": 1,
-        "difficulty": 2
+        "attempts": 3,
+        "difficulty": 3
       },
       {
         "kanji": "甥",
         "reading": "おい",
         "part": "單字",
-        "meaning": "外甥男／姪子"
+        "meaning": "外甥男／姪子",
+        "attempts": 4,
+        "difficulty": 2
       },
       {
         "kanji": "姪",
@@ -162,22 +166,24 @@
         "reading": "はなむこ",
         "part": "單字",
         "meaning": "新郎",
-        "attempts": 1,
-        "difficulty": 2
+        "attempts": 6,
+        "difficulty": 9
       },
       {
         "kanji": "花嫁",
         "reading": "はなよめ",
         "part": "單字",
-        "meaning": "新娘"
+        "meaning": "新娘",
+        "attempts": 1,
+        "difficulty": 2
       },
       {
         "kanji": "ご家族",
         "reading": "ごかぞく",
         "part": "單字",
         "meaning": "對方家人",
-        "attempts": 1,
-        "difficulty": 2
+        "attempts": 2,
+        "difficulty": 1
       },
       {
         "kanji": "ご両親",
@@ -300,8 +306,8 @@
         "reading": "からだ",
         "part": "單字",
         "meaning": "身體",
-        "attempts": 3,
-        "difficulty": 2
+        "attempts": 4,
+        "difficulty": 1
       },
       {
         "kanji": "頭",
@@ -316,8 +322,8 @@
         "reading": "かみ",
         "part": "單字",
         "meaning": "頭髮",
-        "attempts": 4,
-        "difficulty": 2
+        "attempts": 5,
+        "difficulty": 4
       },
       {
         "kanji": "顔",
@@ -340,16 +346,16 @@
         "reading": "みみ",
         "part": "單字",
         "meaning": "耳朵",
-        "attempts": 2,
-        "difficulty": 2
+        "attempts": 4,
+        "difficulty": 3
       },
       {
         "kanji": "鼻",
         "reading": "はな",
         "part": "單字",
         "meaning": "鼻子",
-        "attempts": 3,
-        "difficulty": 0
+        "attempts": 4,
+        "difficulty": 2
       },
       {
         "kanji": "喉",
@@ -362,8 +368,8 @@
         "reading": "くち",
         "part": "單字",
         "meaning": "嘴巴",
-        "attempts": 3,
-        "difficulty": 2
+        "attempts": 4,
+        "difficulty": 4
       },
       {
         "kanji": "歯",
@@ -429,13 +435,17 @@
         "kanji": "学生",
         "reading": "がくせい",
         "part": "單字",
-        "meaning": "學生"
+        "meaning": "學生",
+        "attempts": 1,
+        "difficulty": 2
       },
       {
         "kanji": "生徒",
         "reading": "せいと",
         "part": "單字",
-        "meaning": "學生"
+        "meaning": "學生",
+        "attempts": 1,
+        "difficulty": 0
       },
       {
         "kanji": "校長",
@@ -466,8 +476,8 @@
         "reading": "ともだち",
         "part": "單字",
         "meaning": "朋友",
-        "attempts": 1,
-        "difficulty": 2
+        "attempts": 2,
+        "difficulty": 1
       },
       {
         "kanji": "親友",
@@ -482,8 +492,8 @@
         "reading": "けいさつ",
         "part": "單字",
         "meaning": "警察",
-        "attempts": 1,
-        "difficulty": 2
+        "attempts": 2,
+        "difficulty": 4
       },
       {
         "kanji": "警官",
@@ -498,8 +508,8 @@
         "reading": "おまわりさん",
         "part": "單字",
         "meaning": "警察、巡警",
-        "attempts": 1,
-        "difficulty": 2
+        "attempts": 4,
+        "difficulty": 5
       },
       {
         "kanji": "留学生",
@@ -536,38 +546,40 @@
         "reading": "ばしょ",
         "part": "單字",
         "meaning": "場所",
-        "attempts": 1,
-        "difficulty": 2
+        "attempts": 4,
+        "difficulty": 0
       },
       {
         "kanji": "所",
         "reading": "ところ",
         "part": "單字",
         "meaning": "地點、地方",
-        "attempts": 3,
-        "difficulty": 0
+        "attempts": 9,
+        "difficulty": 6
       },
       {
         "kanji": "角",
         "reading": "かど",
         "part": "單字",
         "meaning": "轉角",
-        "attempts": 1,
-        "difficulty": 0
+        "attempts": 3,
+        "difficulty": 1
       },
       {
         "kanji": "橋",
         "reading": "はし",
         "part": "單字",
         "meaning": "橋",
-        "attempts": 2,
+        "attempts": 5,
         "difficulty": 4
       },
       {
         "kanji": "店",
         "reading": "みせ",
         "part": "單字",
-        "meaning": "店"
+        "meaning": "店",
+        "attempts": 2,
+        "difficulty": 0
       },
       {
         "kanji": "村",
@@ -580,8 +592,8 @@
         "reading": "くに",
         "part": "單字",
         "meaning": "國家",
-        "attempts": 1,
-        "difficulty": 2
+        "attempts": 2,
+        "difficulty": 1
       },
       {
         "kanji": "町",
@@ -596,8 +608,8 @@
         "reading": "みち",
         "part": "單字",
         "meaning": "道路",
-        "attempts": 1,
-        "difficulty": 0
+        "attempts": 3,
+        "difficulty": 2
       },
       {
         "kanji": "庭",
@@ -610,8 +622,8 @@
         "reading": "いけ",
         "part": "單字",
         "meaning": "池塘",
-        "attempts": 1,
-        "difficulty": 0
+        "attempts": 2,
+        "difficulty": 2
       },
       {
         "kanji": "家",
@@ -624,16 +636,16 @@
         "reading": "うち",
         "part": "[0][2]",
         "meaning": "家",
-        "attempts": 5,
-        "difficulty": 5
+        "attempts": 6,
+        "difficulty": 4
       },
       {
         "kanji": "玄関",
         "reading": "げんかん",
         "part": "單字",
         "meaning": "玄關",
-        "attempts": 6,
-        "difficulty": 9
+        "attempts": 11,
+        "difficulty": 4
       },
       {
         "kanji": "部屋",
@@ -674,29 +686,31 @@
         "reading": "たてもの",
         "part": "[2][3]",
         "meaning": "建築物",
-        "attempts": 8,
-        "difficulty": 7
+        "attempts": 12,
+        "difficulty": 3
       },
       {
         "kanji": "食堂",
         "reading": "しょくどう",
         "part": "單字",
-        "meaning": "餐廳（餐館或飯館）"
+        "meaning": "餐廳（餐館或飯館）",
+        "attempts": 1,
+        "difficulty": 0
       },
       {
         "kanji": "会社",
         "reading": "かいしゃ",
         "part": "單字",
         "meaning": "公司",
-        "attempts": 9,
-        "difficulty": 6
+        "attempts": 11,
+        "difficulty": 4
       },
       {
         "kanji": "銀行",
         "reading": "ぎんこう",
         "part": "單字",
         "meaning": "銀行",
-        "attempts": 1,
+        "attempts": 2,
         "difficulty": 0
       },
       {
@@ -704,16 +718,16 @@
         "reading": "こうばん",
         "part": "單字",
         "meaning": "派出所",
-        "attempts": 6,
-        "difficulty": 6
+        "attempts": 9,
+        "difficulty": 3
       },
       {
         "kanji": "公園",
         "reading": "こうえん",
         "part": "單字",
         "meaning": "公園",
-        "attempts": 9,
-        "difficulty": 9
+        "attempts": 15,
+        "difficulty": 15
       },
       {
         "kanji": "病院",
@@ -725,86 +739,96 @@
         "kanji": "学校",
         "reading": "がっこう",
         "part": "單字",
-        "meaning": "學校"
+        "meaning": "學校",
+        "attempts": 3,
+        "difficulty": 1
       },
       {
         "kanji": "教室",
         "reading": "きょうしつ",
         "part": "單字",
-        "meaning": "教室"
+        "meaning": "教室",
+        "attempts": 1,
+        "difficulty": 2
       },
       {
         "kanji": "職員室",
         "reading": "しょくいんしつ",
         "part": "單字",
         "meaning": "教職員室",
-        "attempts": 2,
-        "difficulty": 4
+        "attempts": 5,
+        "difficulty": 7
       },
       {
         "kanji": "バス停",
         "reading": "ばすてい",
         "part": "單字",
         "meaning": "公車站",
-        "attempts": 6,
-        "difficulty": 9
+        "attempts": 12,
+        "difficulty": 6
       },
       {
         "kanji": "喫茶店",
         "reading": "きっさてん",
         "part": "[0][3]",
         "meaning": "咖啡廳、茶館",
-        "attempts": 4,
-        "difficulty": 5
+        "attempts": 11,
+        "difficulty": 7
       },
       {
         "kanji": "郵便局",
         "reading": "ゆうびんきょく",
         "part": "單字",
         "meaning": "郵局",
-        "attempts": 1,
+        "attempts": 2,
         "difficulty": 0
       },
       {
         "kanji": "大使館",
         "reading": "たいしかん",
         "part": "單字",
-        "meaning": "大使館"
+        "meaning": "大使館",
+        "attempts": 9,
+        "difficulty": 15
       },
       {
         "kanji": "図書館",
         "reading": "としょかん",
         "part": "單字",
-        "meaning": "圖書館"
+        "meaning": "圖書館",
+        "attempts": 4,
+        "difficulty": 4
       },
       {
         "kanji": "八百屋",
         "reading": "やおや",
         "part": "單字",
         "meaning": "蔬菜店",
-        "attempts": 3,
+        "attempts": 5,
         "difficulty": 0
       },
       {
         "kanji": "映画館",
         "reading": "えいがかん",
         "part": "單字",
-        "meaning": "電影院"
+        "meaning": "電影院",
+        "attempts": 3,
+        "difficulty": 3
       },
       {
         "kanji": "お手洗い",
         "reading": "おてあらい",
         "part": "單字",
         "meaning": "洗手間",
-        "attempts": 2,
-        "difficulty": 1
+        "attempts": 3,
+        "difficulty": 3
       },
       {
         "kanji": "お風呂",
         "reading": "おふろ",
         "part": "單字",
         "meaning": "浴室／澡堂",
-        "attempts": 3,
+        "attempts": 4,
         "difficulty": 0
       },
       {
@@ -812,7 +836,7 @@
         "reading": "こうさてん",
         "part": "單字",
         "meaning": "交叉路口",
-        "attempts": 10,
+        "attempts": 19,
         "difficulty": 14
       },
       {
@@ -820,8 +844,8 @@
         "reading": "いりぐち",
         "part": "單字",
         "meaning": "入口",
-        "attempts": 5,
-        "difficulty": 4
+        "attempts": 17,
+        "difficulty": 16
       },
       {
         "kanji": "出口",
@@ -833,23 +857,25 @@
         "kanji": "アパート",
         "reading": "apartment",
         "part": "單字",
-        "meaning": "公寓"
+        "meaning": "公寓",
+        "attempts": 1,
+        "difficulty": 0
       },
       {
         "kanji": "デパート",
         "reading": "department",
         "part": "單字",
         "meaning": "百貨公司",
-        "attempts": 3,
-        "difficulty": 6
+        "attempts": 7,
+        "difficulty": 5
       },
       {
         "kanji": "エレベーター",
         "reading": "elevator",
         "part": "單字",
         "meaning": "電梯",
-        "attempts": 23,
-        "difficulty": 40
+        "attempts": 39,
+        "difficulty": 48
       },
       {
         "kanji": "レストラン",
@@ -859,11 +885,11 @@
       },
       {
         "kanji": "カフェ",
-        "reading": "café〔法〕",
+        "reading": "cafe",
         "part": "單字",
         "meaning": "咖啡廳",
-        "attempts": 1,
-        "difficulty": 2
+        "attempts": 10,
+        "difficulty": 17
       },
       {
         "kanji": "プール",
@@ -886,20 +912,936 @@
         "meaning": "廁所",
         "attempts": 1,
         "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": "1786522559623",
+    "name": "方位",
+    "words": [
+      {
+        "kanji": "方位",
+        "reading": "ほうい",
+        "part": "單字",
+        "meaning": "方向、方位",
+        "attempts": 6,
+        "difficulty": 0
       },
       {
-        "kanji": "カフェ",
-        "reading": "飲食店営業許可",
-        "part": "可提供酒",
-        "meaning": "可提供餐點",
+        "kanji": "上",
+        "reading": "うえ",
+        "part": "單字",
+        "meaning": "上面",
+        "attempts": 6,
+        "difficulty": 0
+      },
+      {
+        "kanji": "下",
+        "reading": "した",
+        "part": "單字",
+        "meaning": "下面",
+        "attempts": 6,
+        "difficulty": 0
+      },
+      {
+        "kanji": "左",
+        "reading": "ひだり",
+        "part": "單字",
+        "meaning": "左邊",
+        "attempts": 8,
+        "difficulty": 2
+      },
+      {
+        "kanji": "右",
+        "reading": "みぎ",
+        "part": "單字",
+        "meaning": "右邊",
+        "attempts": 6,
+        "difficulty": 0
+      },
+      {
+        "kanji": "中",
+        "reading": "なか",
+        "part": "單字",
+        "meaning": "中間",
+        "attempts": 5,
+        "difficulty": 2
+      },
+      {
+        "kanji": "前",
+        "reading": "まえ",
+        "part": "單字",
+        "meaning": "前面",
+        "attempts": 8,
+        "difficulty": 0
+      },
+      {
+        "kanji": "後ろ",
+        "reading": "うしろ",
+        "part": "單字",
+        "meaning": "後面",
+        "attempts": 10,
+        "difficulty": 0
+      },
+      {
+        "kanji": "東",
+        "reading": "ひがし",
+        "part": "單字",
+        "meaning": "東方",
+        "attempts": 8,
+        "difficulty": 0
+      },
+      {
+        "kanji": "西",
+        "reading": "にし",
+        "part": "單字",
+        "meaning": "西方",
+        "attempts": 9,
+        "difficulty": 2
+      },
+      {
+        "kanji": "南",
+        "reading": "みなみ",
+        "part": "單字",
+        "meaning": "南方",
+        "attempts": 5,
+        "difficulty": 0
+      },
+      {
+        "kanji": "北",
+        "reading": "きた",
+        "part": "單字",
+        "meaning": "北方",
+        "attempts": 6,
+        "difficulty": 0
+      },
+      {
+        "kanji": "内",
+        "reading": "うち",
+        "part": "單字",
+        "meaning": "裡面",
+        "attempts": 9,
+        "difficulty": 0
+      },
+      {
+        "kanji": "外",
+        "reading": "そと",
+        "part": "單字",
+        "meaning": "外面",
+        "attempts": 5,
+        "difficulty": 0
+      },
+      {
+        "kanji": "縦",
+        "reading": "たて",
+        "part": "單字",
+        "meaning": "直、縱",
+        "attempts": 6,
+        "difficulty": 0
+      },
+      {
+        "kanji": "横",
+        "reading": "よこ",
+        "part": "單字",
+        "meaning": "隔壁、旁邊／橫",
+        "attempts": 7,
+        "difficulty": 0
+      },
+      {
+        "kanji": "隣",
+        "reading": "となり",
+        "part": "單字",
+        "meaning": "隔壁",
+        "attempts": 8,
+        "difficulty": 0
+      },
+      {
+        "kanji": "傍",
+        "reading": "そば",
+        "part": "單字",
+        "meaning": "旁邊、附近",
+        "attempts": 8,
+        "difficulty": 0
+      },
+      {
+        "kanji": "近く",
+        "reading": "ちかく",
+        "part": "[1][2]",
+        "meaning": "附近",
+        "attempts": 8,
+        "difficulty": 0
+      },
+      {
+        "kanji": "辺",
+        "reading": "へん",
+        "part": "單字",
+        "meaning": "附近、一帶",
+        "attempts": 8,
+        "difficulty": 0
+      },
+      {
+        "kanji": "周り",
+        "reading": "まわり",
+        "part": "單字",
+        "meaning": "周圍、周遭",
+        "attempts": 10,
+        "difficulty": 1
+      },
+      {
+        "kanji": "向こう",
+        "reading": "むこう",
+        "part": "單字",
+        "meaning": "對面／前方／對方",
+        "attempts": 6,
+        "difficulty": 0
+      }
+    ]
+  },
+  {
+    "id": "1786548553716",
+    "name": "飲食",
+    "words": [
+      {
+        "kanji": "食べ物",
+        "reading": "たべもの",
+        "part": "單字",
+        "meaning": "食物",
+        "attempts": 1,
+        "difficulty": 0
+      },
+      {
+        "kanji": "ご飯",
+        "reading": "ごはん",
+        "part": "單字",
+        "meaning": "飯",
+        "attempts": 3,
+        "difficulty": 0
+      },
+      {
+        "kanji": "朝ご飯",
+        "reading": "あさごはん",
+        "part": "單字",
+        "meaning": "早飯、早餐",
+        "attempts": 2,
+        "difficulty": 0
+      },
+      {
+        "kanji": "昼ご飯",
+        "reading": "ひるごはん",
+        "part": "單字",
+        "meaning": "午飯、午餐",
+        "attempts": 3,
+        "difficulty": 3
+      },
+      {
+        "kanji": "晩ご飯",
+        "reading": "ばんごはん",
+        "part": "單字",
+        "meaning": "晩飯、晩餐",
+        "attempts": 2,
+        "difficulty": 1
+      },
+      {
+        "kanji": "夕飯",
+        "reading": "ゆうはん",
+        "part": "單字",
+        "meaning": "晩飯、晩餐",
+        "attempts": 3,
+        "difficulty": 1
+      },
+      {
+        "kanji": "お弁当",
+        "reading": "おべんとう",
+        "part": "單字",
+        "meaning": "便當",
+        "attempts": 3,
+        "difficulty": 3
+      },
+      {
+        "kanji": "果物",
+        "reading": "くだもの",
+        "part": "單字",
+        "meaning": "水果",
+        "attempts": 3,
+        "difficulty": 1
+      },
+      {
+        "kanji": "飴",
+        "reading": "あめ",
+        "part": "單字",
+        "meaning": "糖果",
+        "attempts": 2,
+        "difficulty": 0
+      },
+      {
+        "kanji": "お菓子",
+        "reading": "おかし",
+        "part": "單字",
+        "meaning": "點心",
+        "attempts": 3,
+        "difficulty": 0
+      },
+      {
+        "kanji": "カレー",
+        "reading": "curry",
+        "part": "單字",
+        "meaning": "咖哩",
+        "attempts": 4,
+        "difficulty": 8
+      },
+      {
+        "kanji": "パン",
+        "reading": "pão〔葡〕",
+        "part": "單字",
+        "meaning": "麵包",
+        "attempts": 19,
+        "difficulty": 38
+      },
+      {
+        "kanji": "料理",
+        "reading": "りょうり",
+        "part": "單字",
+        "meaning": "料理",
+        "attempts": 4,
+        "difficulty": 0
+      },
+      {
+        "kanji": "魚",
+        "reading": "さかな",
+        "part": "單字",
+        "meaning": "魚",
+        "attempts": 2,
+        "difficulty": 0
+      },
+      {
+        "kanji": "肉",
+        "reading": "にく",
+        "part": "單字",
+        "meaning": "肉",
+        "attempts": 2,
+        "difficulty": 0
+      },
+      {
+        "kanji": "牛肉",
+        "reading": "ぎゅうにく",
+        "part": "單字",
+        "meaning": "牛肉",
+        "attempts": 7,
+        "difficulty": 2
+      },
+      {
+        "kanji": "豚肉",
+        "reading": "ぶたにく",
+        "part": "單字",
+        "meaning": "豬肉",
+        "attempts": 2,
+        "difficulty": 0
+      },
+      {
+        "kanji": "鶏肉",
+        "reading": "とりにく",
+        "part": "單字",
+        "meaning": "雞肉",
+        "attempts": 2,
+        "difficulty": 0
+      },
+      {
+        "kanji": "野菜",
+        "reading": "やさい",
+        "part": "單字",
+        "meaning": "蔬菜",
+        "attempts": 2,
+        "difficulty": 1
+      },
+      {
+        "kanji": "卵",
+        "reading": "たまご",
+        "part": "單字",
+        "meaning": "蛋、卵",
+        "attempts": 3,
+        "difficulty": 3
+      },
+      {
+        "kanji": "塩",
+        "reading": "しお",
+        "part": "單字",
+        "meaning": "鹽巴",
+        "attempts": 1,
+        "difficulty": 0
+      },
+      {
+        "kanji": "バター",
+        "reading": "butter",
+        "part": "單字",
+        "meaning": "奶油",
+        "attempts": 13,
+        "difficulty": 22
+      },
+      {
+        "kanji": "醤油",
+        "reading": "しょうゆ",
+        "part": "單字",
+        "meaning": "醬油",
+        "attempts": 4,
+        "difficulty": 2
+      },
+      {
+        "kanji": "飲み物",
+        "reading": "のみもの",
+        "part": "單字",
+        "meaning": "飲料",
+        "attempts": 3,
+        "difficulty": 0
+      },
+      {
+        "kanji": "水",
+        "reading": "みず",
+        "part": "單字",
+        "meaning": "水",
+        "attempts": 3,
+        "difficulty": 0
+      },
+      {
+        "kanji": "お茶",
+        "reading": "おちゃ",
+        "part": "單字",
+        "meaning": "茶",
+        "attempts": 2,
+        "difficulty": 0
+      },
+      {
+        "kanji": "紅茶",
+        "reading": "こうちゃ",
+        "part": "單字",
+        "meaning": "紅茶",
+        "attempts": 5,
+        "difficulty": 0
+      },
+      {
+        "kanji": "牛乳",
+        "reading": "ぎゅうにゅう",
+        "part": "單字",
+        "meaning": "牛奶",
+        "attempts": 1,
+        "difficulty": 0
+      },
+      {
+        "kanji": "お酒",
+        "reading": "おさけ",
+        "part": "單字",
+        "meaning": "酒",
+        "attempts": 3,
+        "difficulty": 2
+      },
+      {
+        "kanji": "ビール",
+        "reading": "bier",
+        "part": "單字",
+        "meaning": "啤酒",
+        "attempts": 24,
+        "difficulty": 45
+      },
+      {
+        "kanji": "コーヒー",
+        "reading": "coffee",
+        "part": "單字",
+        "meaning": "咖啡",
+        "attempts": 4,
+        "difficulty": 8
+      },
+      {
+        "kanji": "ジュース",
+        "reading": "juice",
+        "part": "單字",
+        "meaning": "果汁",
+        "attempts": 3,
+        "difficulty": 6
+      }
+    ]
+  },
+  {
+    "id": "1786872059912",
+    "name": "大自然",
+    "words": [
+      {
+        "kanji": "雨",
+        "reading": "あめ",
+        "part": "單字",
+        "meaning": "雨、雨水／下雨天",
+        "attempts": 5,
+        "difficulty": 0
+      },
+      {
+        "kanji": "海",
+        "reading": "うみ",
+        "part": "單字",
+        "meaning": "海、海洋、大海",
+        "attempts": 5,
+        "difficulty": 0
+      },
+      {
+        "kanji": "風",
+        "reading": "かぜ",
+        "part": "單字",
+        "meaning": "風",
+        "attempts": 5,
+        "difficulty": 0
+      },
+      {
+        "kanji": "川",
+        "reading": "かわ",
+        "part": "單字",
+        "meaning": "河、川、河川、河水",
+        "attempts": 7,
+        "difficulty": 0
+      },
+      {
+        "kanji": "木",
+        "reading": "き",
+        "part": "單字",
+        "meaning": "樹、樹木／木材、木頭",
+        "attempts": 7,
+        "difficulty": 2
+      },
+      {
+        "kanji": "草",
+        "reading": "くさ",
+        "part": "單字",
+        "meaning": "草／雜草",
+        "attempts": 7,
+        "difficulty": 0
+      },
+      {
+        "kanji": "曇り",
+        "reading": "くもり",
+        "part": "單字",
+        "meaning": "陰天、多雲",
+        "attempts": 9,
+        "difficulty": 0
+      },
+      {
+        "kanji": "自然",
+        "reading": "しぜん",
+        "part": "單字",
+        "meaning": "自然",
+        "attempts": 6,
+        "difficulty": 2
+      },
+      {
+        "kanji": "空",
+        "reading": "そら",
+        "part": "單字",
+        "meaning": "天空／天氣",
+        "attempts": 5,
+        "difficulty": 0
+      },
+      {
+        "kanji": "天気",
+        "reading": "てんき",
+        "part": "單字",
+        "meaning": "天氣／晴天、好天氣",
+        "attempts": 5,
+        "difficulty": 0
+      },
+      {
+        "kanji": "花",
+        "reading": "はな",
+        "part": "單字",
+        "meaning": "花、花朵",
+        "attempts": 5,
+        "difficulty": 0
+      },
+      {
+        "kanji": "晴れ",
+        "reading": "はれ",
+        "part": "單字",
+        "meaning": "晴天",
+        "attempts": 6,
+        "difficulty": 0
+      },
+      {
+        "kanji": "火",
+        "reading": "ひ",
+        "part": "單字",
+        "meaning": "火",
+        "attempts": 6,
+        "difficulty": 2
+      },
+      {
+        "kanji": "山",
+        "reading": "やま",
+        "part": "單字",
+        "meaning": "山",
+        "attempts": 6,
+        "difficulty": 0
+      },
+      {
+        "kanji": "雪",
+        "reading": "ゆき",
+        "part": "單字",
+        "meaning": "雪",
+        "attempts": 5,
+        "difficulty": 0
+      }
+    ]
+  },
+  {
+    "id": "1786873391472",
+    "name": "交通工具",
+    "words": [
+      {
+        "kanji": "駅",
+        "reading": "えき",
+        "part": "單字",
+        "meaning": "車站、火車站",
+        "attempts": 4,
+        "difficulty": 0
+      },
+      {
+        "kanji": "切符",
+        "reading": "きっぷ",
+        "part": "單字",
+        "meaning": "票、車票、入場票",
+        "attempts": 8,
+        "difficulty": 0
+      },
+      {
+        "kanji": "空港",
+        "reading": "くうこう",
+        "part": "單字",
+        "meaning": "機場",
+        "attempts": 5,
+        "difficulty": 0
+      },
+      {
+        "kanji": "車",
+        "reading": "くるま",
+        "part": "單字",
+        "meaning": "車、車子、汽車",
+        "attempts": 3,
+        "difficulty": 0
+      },
+      {
+        "kanji": "交通",
+        "reading": "こうつう",
+        "part": "單字",
+        "meaning": "交通",
+        "attempts": 9,
+        "difficulty": 0
+      },
+      {
+        "kanji": "自転車",
+        "reading": "じてんしゃ",
+        "part": "[2][0]",
+        "meaning": "自行車、腳踏車、單車",
+        "attempts": 7,
+        "difficulty": 0
+      },
+      {
+        "kanji": "地下鉄",
+        "reading": "ちかてつ",
+        "part": "單字",
+        "meaning": "地下鐵、地鐵",
+        "attempts": 5,
+        "difficulty": 0
+      },
+      {
+        "kanji": "電車",
+        "reading": "でんしゃ",
+        "part": "[0][1]",
+        "meaning": "電車",
+        "attempts": 7,
+        "difficulty": 0
+      },
+      {
+        "kanji": "荷物",
+        "reading": "にもつ",
+        "part": "單字",
+        "meaning": "行李、貨物、包裹",
+        "attempts": 5,
+        "difficulty": 0
+      },
+      {
+        "kanji": "飛行機",
+        "reading": "ひこうき",
+        "part": "單字",
+        "meaning": "飛機",
+        "attempts": 5,
+        "difficulty": 0
+      },
+      {
+        "kanji": "タクシー",
+        "reading": "taxi",
+        "part": "單字",
+        "meaning": "計程車",
+        "attempts": 14,
+        "difficulty": 26
+      },
+      {
+        "kanji": "バイク",
+        "reading": "bike",
+        "part": "單字",
+        "meaning": "機車",
+        "attempts": 15,
+        "difficulty": 28
+      },
+      {
+        "kanji": "バス",
+        "reading": "bus",
+        "part": "單字",
+        "meaning": "公車、巴士",
+        "attempts": 13,
+        "difficulty": 24
+      }
+    ]
+  },
+  {
+    "id": "1787594591413",
+    "name": "服裝",
+    "words": [
+      {
+        "kanji": "上着",
+        "reading": "うわぎ",
+        "part": "單字",
+        "meaning": "外衣、外套／上衣",
+        "attempts": 2,
+        "difficulty": 0
+      },
+      {
+        "kanji": "着物",
+        "reading": "きもの",
+        "part": "單字",
+        "meaning": "和服、衣服",
+        "attempts": 2,
+        "difficulty": 4
+      },
+      {
+        "kanji": "靴",
+        "reading": "くつ",
+        "part": "單字",
+        "meaning": "鞋、鞋子",
+        "attempts": 3,
+        "difficulty": 0
+      },
+      {
+        "kanji": "靴下",
+        "reading": "くつした",
+        "part": "單字",
+        "meaning": "襪子",
+        "attempts": 3,
+        "difficulty": 2
+      },
+      {
+        "kanji": "下着",
+        "reading": "したぎ",
+        "part": "單字",
+        "meaning": "内衣",
+        "attempts": 3,
+        "difficulty": 2
+      },
+      {
+        "kanji": "半ズボン",
+        "reading": "はんズボン",
+        "part": "單字",
+        "meaning": "短褲",
+        "attempts": 5,
+        "difficulty": 8
+      },
+      {
+        "kanji": "服",
+        "reading": "ふく",
+        "part": "單字",
+        "meaning": "衣服",
+        "attempts": 1,
+        "difficulty": 0
+      },
+      {
+        "kanji": "洋服",
+        "reading": "ようふく",
+        "part": "單字",
+        "meaning": "西服、西裝",
+        "attempts": 3,
+        "difficulty": 0
+      },
+      {
+        "kanji": "和服",
+        "reading": "わふく",
+        "part": "單字",
+        "meaning": "和服",
+        "attempts": 1,
+        "difficulty": 0
+      },
+      {
+        "kanji": "コート",
+        "reading": "coat",
+        "part": "單字",
+        "meaning": "大衣、外衣、外套",
+        "attempts": 3,
+        "difficulty": 4
+      },
+      {
+        "kanji": "シャツ",
+        "reading": "shirt",
+        "part": "單字",
+        "meaning": "襯衫",
+        "attempts": 1,
+        "difficulty": 2
+      },
+      {
+        "kanji": "スカート",
+        "reading": "skirt",
+        "part": "單字",
+        "meaning": "裙子",
+        "attempts": 2,
+        "difficulty": 2
+      },
+      {
+        "kanji": "スリッパ",
+        "reading": "slipper",
+        "part": "[1][2]",
+        "meaning": "拖鞋",
+        "attempts": 1,
+        "difficulty": 2
+      },
+      {
+        "kanji": "ズボン",
+        "reading": "jupon〔法〕",
+        "part": "[2][1]",
+        "meaning": "褲子、長褲、西裝褲",
+        "attempts": 1,
+        "difficulty": 2
+      },
+      {
+        "kanji": "セーター",
+        "reading": "sweater",
+        "part": "單字",
+        "meaning": "毛衣",
+        "attempts": 3,
+        "difficulty": 6
+      },
+      {
+        "kanji": "Tシャツ",
+        "reading": "T-shirt",
+        "part": "單字",
+        "meaning": "T恤",
+        "attempts": 2,
+        "difficulty": 4
+      },
+      {
+        "kanji": "ボタン",
+        "reading": "botão〔葡〕",
+        "part": "[0][1]",
+        "meaning": "釦子、鈕扣／按鈕、按鍵",
         "attempts": 5,
         "difficulty": 10
       },
       {
-        "kanji": "喫茶店",
-        "reading": "喫茶店営業許可",
-        "part": "不可提供酒",
-        "meaning": "只能提供餅乾等"
+        "kanji": "ポケット",
+        "reading": "pocket",
+        "part": "[2][1]",
+        "meaning": "口袋",
+        "attempts": 2,
+        "difficulty": 4
+      },
+      {
+        "kanji": "ワイシャツ",
+        "reading": "white",
+        "part": "shirt",
+        "meaning": "白襯衫、商務襯衫",
+        "attempts": 1,
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": "1787901780882",
+    "name": "電器",
+    "words": [
+      {
+        "kanji": "こたつ",
+        "reading": "こたつ",
+        "part": "單字",
+        "meaning": "暖桌（日式暖桌）、被爐"
+      },
+      {
+        "kanji": "洗濯機",
+        "reading": "せんたくき",
+        "part": "[4][3]",
+        "meaning": "洗衣機"
+      },
+      {
+        "kanji": "扇風機",
+        "reading": "せんぷうき",
+        "part": "單字",
+        "meaning": "電風扇、電扇"
+      },
+      {
+        "kanji": "暖房",
+        "reading": "だんぼう",
+        "part": "單字",
+        "meaning": "暖氣"
+      },
+      {
+        "kanji": "電気",
+        "reading": "でんき",
+        "part": "單字",
+        "meaning": "電力、電氣／燈、電燈"
+      },
+      {
+        "kanji": "電気製品",
+        "reading": "でんきせいひん",
+        "part": "單字",
+        "meaning": "電器產品"
+      },
+      {
+        "kanji": "電話",
+        "reading": "でんわ",
+        "part": "單字",
+        "meaning": "電話",
+        "attempts": 1,
+        "difficulty": 2
+      },
+      {
+        "kanji": "冷蔵庫",
+        "reading": "れいぞうこ",
+        "part": "單字",
+        "meaning": "冰箱"
+      },
+      {
+        "kanji": "エアコン",
+        "reading": "air",
+        "part": "conditioner",
+        "meaning": "空調"
+      },
+      {
+        "kanji": "カメラ",
+        "reading": "camera",
+        "part": "單字",
+        "meaning": "相機、照相機／攝影機"
+      },
+      {
+        "kanji": "テレビ",
+        "reading": "television",
+        "part": "單字",
+        "meaning": "電視"
+      },
+      {
+        "kanji": "パソコン",
+        "reading": "personal",
+        "part": "computer",
+        "meaning": "電腦、個人電腦"
+      },
+      {
+        "kanji": "ビデオ",
+        "reading": "video",
+        "part": "單字",
+        "meaning": "影片"
+      },
+      {
+        "kanji": "ラジオ",
+        "reading": "radio",
+        "part": "單字",
+        "meaning": "收音機"
       }
     ]
   }
